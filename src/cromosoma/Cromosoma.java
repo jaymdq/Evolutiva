@@ -61,4 +61,17 @@ public class Cromosoma implements Comparable<Object> {
 	public String toString(){
 		return this.genes.toString();
 	}
+	
+	public boolean equals(Object obj){
+		if ( obj instanceof Cromosoma ){
+			Cromosoma c = (Cromosoma) obj;
+			for (int i = 0; i < genes.size() ; i++){
+				if (! genes.elementAt(i).equals(c.getGenes().elementAt(i))){
+					return false;
+				}
+			}
+			return true;
+		}
+		return false;
+	}
 }

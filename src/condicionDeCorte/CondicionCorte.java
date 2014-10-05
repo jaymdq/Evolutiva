@@ -6,7 +6,7 @@ import cromosoma.Cromosoma;
 
 public abstract class CondicionCorte {
 
-	public abstract boolean corto(Vector<Cromosoma> poblacion);
+	public abstract boolean corto(Vector<Cromosoma> poblacion, Long iteracionActual,Long iteracionesMaximas);
 	protected Vector<Integer> solucion = null;
 	
 	public abstract Vector<Integer> getSolucion();

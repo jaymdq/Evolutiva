@@ -9,16 +9,24 @@ public class CondicionCorte1Solucion extends CondicionCorte {
 	public static final String nombre = "Condición de Corte 1 Solución";
 	
 	@Override
-	public boolean corto(Vector<Cromosoma> poblacion) {
+	public boolean corto(Vector<Cromosoma> poblacion,Long iteracionActual,Long iteracionesMaximas) {
 		boolean condicion = false;
-		for (Cromosoma c : poblacion){
-			if ( c.getFitness() == (double) c.getSize()){
-				solucion = c.getGenes();
-				condicion = true;
-				break;
+
+		if (iteracionActual < iteracionesMaximas){
+			for (Cromosoma c : poblacion){
+				if ( c.getFitness() == (double) c.getSize()){
+					solucion = c.getGenes();
+					condicion = true;
+					break;
+				}
 			}
 		}
-		
+		else{
+			// Ya no se debe seguir generando
+			condicion = true;
+			solucion = null;
+		}
+
 		return condicion;
 	}
 

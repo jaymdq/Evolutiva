@@ -23,12 +23,13 @@ public class Configuracion {
 	private Double probabilidadMutacion;
 	private CondicionCorte condicionCorte; 
 	private Evaluacion evaluacion;
+	private Long genMax;
 	
 	public Configuracion(Integer n,GenerarPoblacion genPob, SeleccionPadres seleccionPadres,
 			Cruzamiento cruzamiento, Mutacion mutacion,
 			SeleccionSobrevivientes seleccionSobrevivientes,
 			Integer tamPoblacion, Double probabilidadCruce,
-			Double probabilidadMutacion,CondicionCorte condicion, Evaluacion eval) {
+			Double probabilidadMutacion,CondicionCorte condicion, Evaluacion eval, Long genMax) {
 		super();
 		this.setN(n);
 		this.setGenPob(genPob);
@@ -41,6 +42,7 @@ public class Configuracion {
 		this.setProbabilidadMutacion(probabilidadMutacion);
 		this.setCondicionCorte(condicion);
 		this.setEvaluacion(eval);
+		this.setGenMax(genMax);
 	}
 
 	public Integer getN() {
@@ -150,6 +152,14 @@ public class Configuracion {
 
 	public void setGenPob(GenerarPoblacion genPob) {
 		this.genPob = genPob;
+	}
+
+	public Long getGenMax() {
+		return genMax;
+	}
+
+	public void setGenMax(Long genMax) {
+		this.genMax = genMax;
 	}
 	
 }

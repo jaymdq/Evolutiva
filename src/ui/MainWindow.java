@@ -414,4 +414,33 @@ public class MainWindow {
 		//Paramos al reloj.
 		cronometro.cronometroActivo = false;
 	}
+
+	public static void noSeEncontroSolucion() {
+		
+		consola.escribirSalto("Fin de la Ejecución : " + info.getHoraFecha());
+		
+		consola.escribirSalto("Se llegó al límite de generaciones permitidas y no se encontró una solución.");
+		
+		//Aviso que no se encontró una solución.
+		 final WebNotificationPopup notificationPopup = new WebNotificationPopup ();
+        notificationPopup.setIcon ( new ImageIcon( Toolkit.getDefaultToolkit().getImage(MainWindow.class.getResource("/imagenes/plus.png")) ));
+        notificationPopup.setDisplayTime ( 5000 );
+        final WebClock clock = new WebClock ();
+        clock.setClockType ( ClockType.timer );
+        clock.setTimeLeft ( 5000 );
+        clock.setTimePattern ( "'Se llegó al límite de generaciones permitidas y no se encontró una solución.'" );
+        notificationPopup.setContent ( new GroupPanel ( clock ) );
+        NotificationManager.showNotification ( notificationPopup );
+        clock.start ();
+
+		//Necesario repintar la pantalla (sino no se updateaba el menuBar)
+		frame.repaint();
+		
+		//Paro la animación del botón. !! DEJAR ACÁ ABAJO
+		button.doClick();
+
+		//Escribimos a Archivo
+		escribirAArchivo();
+		
+	}
 }

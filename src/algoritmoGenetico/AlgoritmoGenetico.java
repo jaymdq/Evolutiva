@@ -22,7 +22,7 @@ public class AlgoritmoGenetico implements Runnable{
 	@SuppressWarnings("unchecked")
 	public Vector<Integer> getSolucion(){
 		//Variables auxiliares
-		Integer iteraciones = 0;
+		Long iteraciones = (long) 0;
 		Double mejorFit = 0.0;
 		Double peorFit = (double) configuracion.getTamPoblacion();
 		Double promFit = 0.0;
@@ -51,7 +51,7 @@ public class AlgoritmoGenetico implements Runnable{
 
 		System.out.println("1. poblacion inicial : " + poblacion);
 
-		while( ! configuracion.getCondicionCorte().corto(poblacion) && ! Thread.currentThread().isInterrupted() ){
+		while( ! configuracion.getCondicionCorte().corto(poblacion,iteraciones,configuracion.getGenMax()) && ! Thread.currentThread().isInterrupted() ){
 
 			//Estadisticas
 			iteraciones++;
@@ -121,7 +121,8 @@ public class AlgoritmoGenetico implements Runnable{
 			MainWindow.dibujarAviones(solucion);
 		}else
 		{
-			System.out.println("Ejecución Interrumpida");
+			System.out.println("Ejecución Interrumpida o se llego al limite maximo");
+			MainWindow.noSeEncontroSolucion();
 		}
 	}
 

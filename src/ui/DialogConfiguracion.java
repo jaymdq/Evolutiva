@@ -4,12 +4,16 @@ import fitness.Evaluacion;
 import fitness.Evaluacion1toN;
 import generarPoblacion.GenerarPoblacion;
 import generarPoblacion.GenerarPoblacionRandom;
+
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
+
 import algoritmoGenetico.Configuracion;
+
 import com.alee.extended.layout.VerticalFlowLayout;
 import com.alee.extended.panel.SingleAlignPanel;
 import com.alee.extended.window.PopOverDirection;
@@ -22,15 +26,20 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.factories.FormFactory;
+
 import condicionDeCorte.CondicionCorte;
 import condicionDeCorte.CondicionCorte1Solucion;
 import cruzamiento.C1Punto;
 import cruzamiento.Cruzamiento;
+
 import javax.swing.border.LineBorder;
+
 import java.awt.Color;
 import java.awt.Font;
+
 import javax.swing.JLabel;
 import javax.swing.SpinnerNumberModel;
+
 import mutacion.MInsercion;
 import mutacion.MIntercambio;
 import mutacion.MInversion;
@@ -40,14 +49,17 @@ import seleccionPadres.SeleccionPadreTorneo;
 import seleccionPadres.SeleccionPadres;
 import seleccionSobrevivientes.SeleccionSobrevivienteSteadyState;
 import seleccionSobrevivientes.SeleccionSobrevivientes;
+
 import java.awt.Label;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+import javax.swing.SwingConstants;
 
 public class DialogConfiguracion extends JDialog {
 
@@ -72,13 +84,15 @@ public class DialogConfiguracion extends JDialog {
 	private JLabel lblN;
 	private WebComboBox metodosGeneracion;
 	private JButton botonAceptar;
+	private WebSpinner generacionesMaximas;
+	private JLabel lblGeneracinMximaPermitida;
 	
 	@SuppressWarnings("static-access")
 	public DialogConfiguracion(MainWindow mainWindow) {
 		super(mainWindow.frame, "Configuración", ModalityType.APPLICATION_MODAL);
 		main = mainWindow;
 		setIconImage(Toolkit.getDefaultToolkit().getImage(DialogConfiguracion.class.getResource("/imagenes/Avion.png")));
-		setBounds(100, 100, 900, 550);
+		setBounds(100, 100, 1000, 550);
 		setLocationRelativeTo(null);
 		setResizable(false);
 		
@@ -96,7 +110,7 @@ public class DialogConfiguracion extends JDialog {
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("max(71dlu;default):grow"),
+				ColumnSpec.decode("50dlu:grow"),
 				FormFactory.RELATED_GAP_COLSPEC,},
 			new RowSpec[] {
 				FormFactory.RELATED_GAP_ROWSPEC,
@@ -301,6 +315,19 @@ public class DialogConfiguracion extends JDialog {
 		cortes.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		panelConfig.add(cortes, "6, 22, 2, 1");
 
+		//Cantidad de generaciones maxima
+		generacionesMaximas = new WebSpinner ();
+		generacionesMaximas.setModel(new SpinnerNumberModel(new Long(10000), new Long(1), new Long(Long.MAX_VALUE), new Long(1)));
+		generacionesMaximas.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		generacionesMaximas.setValue(10000);
+		panelConfig.add(generacionesMaximas, "11, 22");
+		
+		lblGeneracinMximaPermitida = new JLabel("Generaci\u00F3n m\u00E1xima permitida");
+		lblGeneracinMximaPermitida.setHorizontalAlignment(SwingConstants.CENTER);
+		lblGeneracinMximaPermitida.setFont(new Font("Tahoma", Font.ITALIC, 14));
+		panelConfig.add(lblGeneracinMximaPermitida, "11, 24");
+		
+		
 		JPanel panelSur = new JPanel();
 		panelSur.setBorder(new LineBorder(new Color(0, 0, 0)));
 		getContentPane().add(panelSur, BorderLayout.SOUTH);
@@ -339,10 +366,10 @@ public class DialogConfiguracion extends JDialog {
              popOver.setModal ( true );
              popOver.setMargin ( 10 );
              popOver.setMovable ( false );
-             popOver.setLayout ( new VerticalFlowLayout () );
+             popOver.getContentPane().setLayout ( new VerticalFlowLayout () );
              popOver.setAlwaysOnTop(true);
-             popOver.add ( new WebLabel ( "Si se usa Steady-State el n debe ser menor o igual al tamaño de la población." ).setFontSize(14) );
-             popOver.add ( new SingleAlignPanel ( new WebButton ( "Entendido", new ActionListener ()
+             popOver.getContentPane().add ( new WebLabel ( "Si se usa Steady-State el n debe ser menor o igual al tamaño de la población." ).setFontSize(14) );
+             popOver.getContentPane().add ( new SingleAlignPanel ( new WebButton ( "Entendido", new ActionListener ()
              {
                  @Override
                  public void actionPerformed ( final ActionEvent e )
@@ -407,7 +434,10 @@ public class DialogConfiguracion extends JDialog {
 		case 0 : eval = new Evaluacion1toN();
 		}
 		
-		Configuracion config = new Configuracion(n,genPob,selPad,cruza,mutacion,selSob,tam,probC,probM,condicion,eval);
+		Long genMax = (Long) generacionesMaximas.getValue();
+		
+		
+		Configuracion config = new Configuracion(n,genPob,selPad,cruza,mutacion,selSob,tam,probC,probM,condicion,eval,genMax);
 		
 		main.setConfig(config);
 		
