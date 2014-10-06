@@ -30,6 +30,7 @@ import com.jgoodies.forms.factories.FormFactory;
 import condicionDeCorte.CondicionCorte;
 import condicionDeCorte.CondicionCorte1Solucion;
 import cruzamiento.C1Punto;
+import cruzamiento.CCiclos;
 import cruzamiento.Cruzamiento;
 
 import javax.swing.border.LineBorder;
@@ -84,8 +85,9 @@ public class DialogConfiguracion extends JDialog {
 	private JLabel lblN;
 	private WebComboBox metodosGeneracion;
 	private JButton botonAceptar;
-	private WebSpinner generacionesMaximas;
+	private WebSpinner s;
 	private JLabel lblGeneracinMximaPermitida;
+	private WebSpinner generacionesMaximas;
 	
 	@SuppressWarnings("static-access")
 	public DialogConfiguracion(MainWindow mainWindow) {
@@ -211,7 +213,7 @@ public class DialogConfiguracion extends JDialog {
 		//Operadores de cruce
 	    String[] operadores1 = new String[2];
 	    operadores1[0] = C1Punto.nombre;
-	    operadores1[1] = "Completar :D";
+	    operadores1[1] = CCiclos.nombre;
         operadoresCruce = new WebComboBox ( operadores1 );
         operadoresCruce.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		panelConfig.add(operadoresCruce, "6, 10, 2, 1");
@@ -319,7 +321,7 @@ public class DialogConfiguracion extends JDialog {
 		generacionesMaximas = new WebSpinner ();
 		generacionesMaximas.setModel(new SpinnerNumberModel(new Long(10000), new Long(1), new Long(Long.MAX_VALUE), new Long(1)));
 		generacionesMaximas.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		generacionesMaximas.setValue(10000);
+		generacionesMaximas.setValue(new Long(10000));
 		panelConfig.add(generacionesMaximas, "11, 22");
 		
 		lblGeneracinMximaPermitida = new JLabel("Generaci\u00F3n m\u00E1xima permitida");
@@ -403,6 +405,7 @@ public class DialogConfiguracion extends JDialog {
 		Cruzamiento cruza = null;
 		switch (operadoresCruce.getSelectedIndex()){
 			case 0 : cruza = new C1Punto();
+			case 1 : cruza = new CCiclos();
 		}
 
 		Mutacion mutacion = null;
