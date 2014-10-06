@@ -31,6 +31,7 @@ import condicionDeCorte.CondicionCorte;
 import condicionDeCorte.CondicionCorte1Solucion;
 import cruzamiento.C1Punto;
 import cruzamiento.CCiclos;
+import cruzamiento.Cpmx;
 import cruzamiento.Cruzamiento;
 
 import javax.swing.border.LineBorder;
@@ -211,9 +212,10 @@ public class DialogConfiguracion extends JDialog {
 		panelConfig.add(lblNewLabel, "2, 10, 3, 1");
 		
 		//Operadores de cruce
-	    String[] operadores1 = new String[2];
+	    String[] operadores1 = new String[3];
 	    operadores1[0] = C1Punto.nombre;
 	    operadores1[1] = CCiclos.nombre;
+	    operadores1[2] = Cpmx.nombre;
         operadoresCruce = new WebComboBox ( operadores1 );
         operadoresCruce.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		panelConfig.add(operadoresCruce, "6, 10, 2, 1");
@@ -406,6 +408,7 @@ public class DialogConfiguracion extends JDialog {
 		switch (operadoresCruce.getSelectedIndex()){
 			case 0 : cruza = new C1Punto();
 			case 1 : cruza = new CCiclos();
+			case 2 : cruza = new Cpmx();
 		}
 
 		Mutacion mutacion = null;
