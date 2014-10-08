@@ -1,7 +1,6 @@
 package algoritmoGenetico;
 
 import generarPoblacion.GenerarPoblacionRandom;
-
 import java.text.DecimalFormat;
 import java.util.Vector;
 
@@ -32,9 +31,9 @@ public class AlgoritmoGenetico implements Runnable{
 		Vector<Cromosoma> poblacion = new Vector<Cromosoma>();
 		GenerarPoblacionRandom gen = new GenerarPoblacionRandom();
 		poblacion = gen.generar(configuracion.getTamPoblacion(),configuracion.getN());
-
+				
 		for (Cromosoma c : poblacion){
-			//configuracion
+			//Configuracion
 			configuracion.getEvaluacion().calcularFitness(c);
 			//Estadisticas
 			if (c.getFitness() > mejorFit){
@@ -49,7 +48,7 @@ public class AlgoritmoGenetico implements Runnable{
 		//Estadistica
 		promFit /= configuracion.getTamPoblacion();
 
-		System.out.println("1. poblacion inicial : " + poblacion);
+		//System.out.println("1. poblacion inicial : " + poblacion);
 
 		while( ! configuracion.getCondicionCorte().corto(poblacion,iteraciones,configuracion.getGenMax()) && ! Thread.currentThread().isInterrupted() ){
 
@@ -61,10 +60,9 @@ public class AlgoritmoGenetico implements Runnable{
 			Vector<Cromosoma> padres = (Vector<Cromosoma>) poblacion.clone();
 			Vector<Vector<Cromosoma>> parejas = configuracion.getSeleccionPadres().seleccionar(poblacion);
 
-
 			//Cruzamos a las parejas
 			Vector<Cromosoma> hijos = new Vector<Cromosoma>();
-
+			
 			for (Vector<Cromosoma> pareja : parejas){
 				//Vemos si se da la chanche de que se crucen
 				if (Math.random() < configuracion.getProbabilidadCruce()){
@@ -72,17 +70,17 @@ public class AlgoritmoGenetico implements Runnable{
 				}
 			}
 
-			//Calculamos el Fitness de los hijos
-			for (Cromosoma c : hijos){
-				configuracion.getEvaluacion().calcularFitness(c);
-			}
-			
 			//Mutamos a los hijos
 			for (Cromosoma c : hijos){
 				if ( Math.random() < configuracion.getProbabilidadMutacion())
 					configuracion.getMutacion().mutar(c);
 			}
-
+			
+			//Calculamos el Fitness de los hijos
+			for (Cromosoma c : hijos){
+				configuracion.getEvaluacion().calcularFitness(c);
+			}
+			
 			//Seleccionamos los sobrevivientes
 			poblacion = configuracion.getSeleccionSobrevivientes().seleccionar(padres, hijos);
 

@@ -394,34 +394,34 @@ public class DialogConfiguracion extends JDialog {
 		
 		GenerarPoblacion genPob = null;
 		switch ( metodosGeneracion.getSelectedIndex() ){
-		case 0 : genPob = new GenerarPoblacionRandom();	
+			case 0 : genPob = new GenerarPoblacionRandom();	break;
 		//case 1 :
 	}
 		
 		SeleccionPadres selPad = null ;
 		switch ( metodosSeleccion.getSelectedIndex() ){
-			case 0 : selPad = new SeleccionPadreTorneo((Integer) k.getValue());	
+			case 0 : selPad = new SeleccionPadreTorneo((Integer) k.getValue()); break;
 			//case 1 :
 		}
 
 		Cruzamiento cruza = null;
 		switch (operadoresCruce.getSelectedIndex()){
-			case 0 : cruza = new C1Punto();
-			case 1 : cruza = new CCiclos();
-			case 2 : cruza = new Cpmx();
+			case 0 : cruza = new C1Punto(); break;
+			case 1 : cruza = new CCiclos(); break;
+			case 2 : cruza = new Cpmx(); break;
 		}
 
 		Mutacion mutacion = null;
 		switch (operadoresMutacion.getSelectedIndex()){
-			case 0 : mutacion = new MIntercambio();
-			case 1 : mutacion = new MInversion();
-			case 2 : mutacion = new MMezcla();
-			case 3 : mutacion = new MInsercion();
+			case 0 : mutacion = new MIntercambio(); break;
+			case 1 : mutacion = new MInversion(); break;
+			case 2 : mutacion = new MMezcla(); break;
+			case 3 : mutacion = new MInsercion(); break;
 		}
 
 		SeleccionSobrevivientes selSob = null;
 		switch(metodosSobrevivientes.getSelectedIndex()){
-			case 0 : selSob = new SeleccionSobrevivienteSteadyState((Integer) nn.getValue());
+			case 0 : selSob = new SeleccionSobrevivienteSteadyState((Integer) nn.getValue()); break;
 		}
 		
 		Integer tam = (Integer) sizePoblacion.getValue();
@@ -432,12 +432,12 @@ public class DialogConfiguracion extends JDialog {
 		
 		CondicionCorte condicion = null;
 		switch(cortes.getSelectedIndex()){
-			case 0 : condicion = new CondicionCorte1Solucion();
+			case 0 : condicion = new CondicionCorte1Solucion(); break;
 		}
 		
 		Evaluacion eval = null;
 		switch(fit.getSelectedIndex()){
-		case 0 : eval = new Evaluacion1toN();
+			case 0 : eval = new Evaluacion1toN(); break;
 		}
 		
 		Long genMax = (Long) generacionesMaximas.getValue();

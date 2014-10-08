@@ -18,13 +18,11 @@ public class generarPoblacionRandomSinRepeticiones implements GenerarPoblacion {
 			
 			if (!salida.contains(c))
 				salida.add(c);
-			//else
-				// Que pasa acá?
+			else
+				i--;
 		}
 		return salida;
 	}
-
-	
 
 	@SuppressWarnings("static-access")
 	public String toString(){
