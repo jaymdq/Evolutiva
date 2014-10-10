@@ -35,9 +35,9 @@ public class DialogAcercaDe extends JDialog {
 	@SuppressWarnings("static-access")
 	public DialogAcercaDe(MainWindow mainWindow) {
 		super(mainWindow.frame, "Acerca De COMPLETAR", ModalityType.APPLICATION_MODAL);
-		setTitle("Acerca De COMPLETAR");
+		setTitle("Ubicador de Aviones");
 		this.setResizable(false);
-		setBounds(100, 100, 450, 450);
+		setBounds(100, 100, 460, 470);
 		this.setLocationRelativeTo(null);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -74,14 +74,14 @@ public class DialogAcercaDe extends JDialog {
 			JLabel brian = new JLabel("");
 			brian.setToolTipText("CAIMMI, Brian");
 			brian.setBorder(new LineBorder(Color.BLACK));
-			brian.setIcon(new ImageIcon(DialogAcercaDe.class.getResource("/imagenes/foto.jpg")));
+			brian.setIcon(new ImageIcon(DialogAcercaDe.class.getResource("/imagenes/brian.jpg")));
 			contentPanel.add(brian, "3, 2, center, default");
 		}
 		{
 			JLabel hernan = new JLabel("");
 			hernan.setToolTipText("ROCHA, Hern\u00E1n Gabriel");
 			hernan.setBorder(new LineBorder(Color.BLACK));
-			hernan.setIcon(new ImageIcon(DialogAcercaDe.class.getResource("/imagenes/foto.jpg")));
+			hernan.setIcon(new ImageIcon(DialogAcercaDe.class.getResource("/imagenes/viru.jpg")));
 			contentPanel.add(hernan, "7, 2, center, center");
 		}
 		{
