@@ -13,8 +13,12 @@ public class MMezcla implements Mutacion {
 		//En esta versión la mezcla se hace con genes contiguos
 		Integer N = c.getSize();
 		Integer g1 = (int) (Math.random() * N);
-		Integer g2 = (int) (Math.random() * N);
+		Integer g2;
+		do {
+			g2 = (int) (Math.random() * N);
+		} while (g2 == g1);
 
+		
 		if ( g1 > g2 ){
 			Integer aux = g1;
 			g1 = g2;

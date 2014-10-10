@@ -10,7 +10,11 @@ public final class MIntercambio implements Mutacion {
 	public final void mutar(Cromosoma c) {
 		Integer N = c.getSize();
 		Integer g1 = (int) (Math.random() * N);
-		Integer g2 = (int) (Math.random() * N);
+		Integer g2;
+		do {
+			g2 = (int) (Math.random() * N);
+		} while (g2 == g1);
+
 
 		Integer a1 = c.getGen(g1);
 		Integer a2 = c.getGen(g2);

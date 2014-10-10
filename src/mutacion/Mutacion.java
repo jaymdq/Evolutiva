@@ -4,5 +4,6 @@ import cromosoma.Cromosoma;
 
 public interface Mutacion{
 	
-	public void mutar(Cromosoma c);
+	public abstract void mutar(Cromosoma c);
+
 }

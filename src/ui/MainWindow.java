@@ -415,7 +415,7 @@ public class MainWindow {
 		cronometro.cronometroActivo = false;
 	}
 
-	public static void noSeEncontroSolucion() {
+	public static void noSeEncontroSolucion(boolean doclick) {
 		
 		consola.escribirSalto("Fin de la Ejecución : " + info.getHoraFecha());
 		
@@ -437,7 +437,8 @@ public class MainWindow {
 		frame.repaint();
 		
 		//Paro la animación del botón. !! DEJAR ACÁ ABAJO
-		button.doClick();
+		if (!doclick)
+			button.doClick();
 
 		//Escribimos a Archivo
 		escribirAArchivo();
