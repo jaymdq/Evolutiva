@@ -13,11 +13,10 @@ public final class C1Punto implements Cruzamiento {
 		Vector<Integer> padre1 = padres.elementAt(0).getGenes();
 		Vector<Integer> padre2 = padres.elementAt(1).getGenes();
 		Integer N = padre1.size();
-		Integer puntoCruce = (int) (Math.random() * N);
-
+		Integer puntoCruce = (int) (Math.random() * (N-4)) + 2;
+		
 		Vector<Integer> hijo1 = new Vector<Integer>();
 		Vector<Integer> hijo2 = new Vector<Integer>();
-		
 		
 		hijo1.addAll(padre1.subList(0, puntoCruce));
 		hijo2.addAll(padre2.subList(0, puntoCruce));
