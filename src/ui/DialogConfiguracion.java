@@ -52,6 +52,7 @@ import seleccionPadres.SeleccionPadreTorneo;
 import seleccionPadres.SeleccionPadres;
 import seleccionSobrevivientes.SeleccionSobrevivienteSteadyState;
 import seleccionSobrevivientes.SeleccionSobrevivientes;
+import seleccionSobrevivientes.SeleccionSobrevivientesRanking;
 
 import java.awt.Label;
 import java.awt.Toolkit;
@@ -87,7 +88,6 @@ public class DialogConfiguracion extends JDialog {
 	private JLabel lblN;
 	private WebComboBox metodosGeneracion;
 	private JButton botonAceptar;
-	private WebSpinner s;
 	private JLabel lblGeneracinMximaPermitida;
 	private WebSpinner generacionesMaximas;
 	
@@ -242,7 +242,7 @@ public class DialogConfiguracion extends JDialog {
 		//Métodos de selección de sobrevivientes
 	    String[] metodos3 = new String[2];
 	    metodos3[0] = SeleccionSobrevivienteSteadyState.nombre;
-	    metodos3[1] = "Completar :D";
+	    metodos3[1] = SeleccionSobrevivientesRanking.nombre;
         metodosSobrevivientes = new WebComboBox ( metodos3 );
         metodosSobrevivientes.setFont(new Font("Tahoma", Font.PLAIN, 16));
         metodosSobrevivientes.addItemListener( new ItemListener(){
@@ -423,6 +423,7 @@ public class DialogConfiguracion extends JDialog {
 		SeleccionSobrevivientes selSob = null;
 		switch(metodosSobrevivientes.getSelectedIndex()){
 			case 0 : selSob = new SeleccionSobrevivienteSteadyState((Integer) nn.getValue()); break;
+			case 1 : selSob = new SeleccionSobrevivientesRanking(); break;
 		}
 		
 		Integer tam = (Integer) sizePoblacion.getValue();

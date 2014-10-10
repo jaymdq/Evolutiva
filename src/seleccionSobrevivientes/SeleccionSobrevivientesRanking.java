@@ -7,6 +7,8 @@ import cromosoma.Cromosoma;
 
 public class SeleccionSobrevivientesRanking implements SeleccionSobrevivientes {
 
+	public static final String nombre = "Ranking";
+	
 	@Override
 	public Vector<Cromosoma> seleccionar(Vector<Cromosoma> conjuntoPadres,Vector<Cromosoma> conjuntoHijos) {
 		Vector<Cromosoma> total = new Vector<Cromosoma>();
@@ -36,4 +38,9 @@ public class SeleccionSobrevivientesRanking implements SeleccionSobrevivientes {
 		return salida;
 	}
 
+	
+	@SuppressWarnings("static-access")
+	public String toString(){
+		return this.nombre ;
+	}
 }
