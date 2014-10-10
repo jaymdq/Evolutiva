@@ -47,6 +47,7 @@ import mutacion.MIntercambio;
 import mutacion.MInversion;
 import mutacion.MMezcla;
 import mutacion.Mutacion;
+import seleccionPadres.SeleccionPadreRuleta;
 import seleccionPadres.SeleccionPadreTorneo;
 import seleccionPadres.SeleccionPadres;
 import seleccionSobrevivientes.SeleccionSobrevivienteSteadyState;
@@ -180,7 +181,7 @@ public class DialogConfiguracion extends JDialog {
 		//Métodos de selección de padres.
 	    String[] metodos2 = new String[2];
 	    metodos2[0] = SeleccionPadreTorneo.nombre;
-	    metodos2[1] = "Completar :D";
+	    metodos2[1] = SeleccionPadreRuleta.nombre;
         metodosSeleccion = new WebComboBox ( metodos2 );
         metodosSeleccion.setFont(new Font("Tahoma", Font.PLAIN, 16));
         metodosSeleccion.addItemListener( new ItemListener(){
@@ -401,7 +402,7 @@ public class DialogConfiguracion extends JDialog {
 		SeleccionPadres selPad = null ;
 		switch ( metodosSeleccion.getSelectedIndex() ){
 			case 0 : selPad = new SeleccionPadreTorneo((Integer) k.getValue()); break;
-			//case 1 :
+			case 1 : selPad = new SeleccionPadreRuleta(); break;
 		}
 
 		Cruzamiento cruza = null;
