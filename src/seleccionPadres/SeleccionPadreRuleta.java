@@ -24,8 +24,17 @@ public class SeleccionPadreRuleta implements SeleccionPadres {
 				rand -= conjunto.get(pos).getFitness();
 				pos++;
 			}
+			pareja.add(conjunto.get(pos));
+			rand = Math.random() * total;
+			pos = 0;
+			while (conjunto.get(pos).getFitness() < rand) {
+				rand -= conjunto.get(pos).getFitness();
+				pos++;
+			}
+			pareja.add(conjunto.get(pos));
 			salida.add(pareja);
 		}
+
 		return salida;
 	}
 
