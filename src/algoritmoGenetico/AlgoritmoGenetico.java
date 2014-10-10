@@ -1,6 +1,6 @@
 package algoritmoGenetico;
 
-import generarPoblacion.GenerarPoblacionRandomSinRepeticiones;
+import generarPoblacion.GenerarPoblacion;
 
 import java.text.DecimalFormat;
 import java.util.Vector;
@@ -30,7 +30,7 @@ public class AlgoritmoGenetico implements Runnable{
 
 		//Generamos la población
 		Vector<Cromosoma> poblacion = new Vector<Cromosoma>();
-		GenerarPoblacionRandomSinRepeticiones gen = new GenerarPoblacionRandomSinRepeticiones();
+		GenerarPoblacion gen = configuracion.getGenPob();
 		poblacion = gen.generar(configuracion.getTamPoblacion(),configuracion.getN());
 				
 		for (Cromosoma c : poblacion){
@@ -116,11 +116,11 @@ public class AlgoritmoGenetico implements Runnable{
 		Vector<Integer> solucion;
 		solucion = getSolucion();
 		if (solucion != null && !Thread.currentThread().isInterrupted()){
-			System.out.println(solucion);
+			//System.out.println(solucion);
 			MainWindow.dibujarAviones(solucion);
 		}else
 		{
-			System.out.println("Ejecución Interrumpida o se llego al limite maximo");
+			//System.out.println("Ejecución Interrumpida o se llego al limite maximo");
 			MainWindow.noSeEncontroSolucion(Thread.currentThread().isInterrupted());
 		}
 	}

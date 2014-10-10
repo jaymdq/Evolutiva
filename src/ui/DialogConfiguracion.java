@@ -4,6 +4,7 @@ import fitness.Evaluacion;
 import fitness.Evaluacion1toN;
 import generarPoblacion.GenerarPoblacion;
 import generarPoblacion.GenerarPoblacionRandom;
+import generarPoblacion.GenerarPoblacionRandomSinRepeticiones;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -65,6 +66,9 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.SwingConstants;
 
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+
 public class DialogConfiguracion extends JDialog {
 
 	/**
@@ -90,6 +94,7 @@ public class DialogConfiguracion extends JDialog {
 	private JButton botonAceptar;
 	private JLabel lblGeneracinMximaPermitida;
 	private WebSpinner generacionesMaximas;
+	private JLabel lblNewLabel_2;
 	
 	@SuppressWarnings("static-access")
 	public DialogConfiguracion(MainWindow mainWindow) {
@@ -168,8 +173,9 @@ public class DialogConfiguracion extends JDialog {
         panelConfig.add(lblMtodoDeGeneracin, "2, 6, 4, 1");
         
         //Métodos de generación de la población inicial.
-        String[] metodos1 = new String[1];
+        String[] metodos1 = new String[2];
         metodos1[0] = GenerarPoblacionRandom.nombre;
+        metodos1[1] = GenerarPoblacionRandomSinRepeticiones.nombre;
         metodosGeneracion = new WebComboBox ( metodos1 );
 		metodosGeneracion.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		panelConfig.add(metodosGeneracion, "6, 6, 2, 1");
@@ -203,10 +209,10 @@ public class DialogConfiguracion extends JDialog {
 		panelConfig.add(lblK, "9, 8");
 		
 		k = new WebSpinner ();
-		k.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		k.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		k.setModel(new SpinnerNumberModel(2, 2, 10000, 1));
 		k.setValue(2);
-		panelConfig.add(k, "11, 8");
+		panelConfig.add(k, "11, 8, default, center");
 		
 		JLabel lblNewLabel = new JLabel("Operador de Cruce Gen\u00E9tico");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -259,12 +265,12 @@ public class DialogConfiguracion extends JDialog {
         });
 		panelConfig.add(metodosSobrevivientes, "6, 14, 2, 1");
 		
-		lblN = new JLabel("n =");
+		lblN = new JLabel("n = ");
 		lblN.setFont(new Font("Tahoma", Font.ITALIC, 16));
 		panelConfig.add(lblN, "9, 14");
 		
 		nn = new WebSpinner ();
-		nn.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		nn.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		nn.setModel(new SpinnerNumberModel(2, 2, 10000, 1));
 		nn.setValue(2);
 		panelConfig.add(nn, "11, 14");
@@ -286,6 +292,11 @@ public class DialogConfiguracion extends JDialog {
 		sizePoblacion.setModel(new SpinnerNumberModel(10, 1, 100000, 2));
 		sizePoblacion.setValue(10);
 		panelConfig.add(sizePoblacion, "6, 16");
+		
+		lblNewLabel_2 = new JLabel("Aclaraci\u00F3n : No exceder el factorial del n\u00FAmero de aviones");
+		lblNewLabel_2.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_2.setFont(new Font("Tahoma", Font.ITALIC, 16));
+		panelConfig.add(lblNewLabel_2, "7, 16, 5, 1");
 		
 		JLabel lblProbabilidadDeCruce = new JLabel("Probabilidad de Cruce Gen\u00E9tico");
 		lblProbabilidadDeCruce.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -323,14 +334,14 @@ public class DialogConfiguracion extends JDialog {
 		//Cantidad de generaciones maxima
 		generacionesMaximas = new WebSpinner ();
 		generacionesMaximas.setModel(new SpinnerNumberModel(new Long(10000), new Long(1), new Long(Long.MAX_VALUE), new Long(1)));
-		generacionesMaximas.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		generacionesMaximas.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		generacionesMaximas.setValue(new Long(10000));
-		panelConfig.add(generacionesMaximas, "11, 22");
+		panelConfig.add(generacionesMaximas, "9, 22, 3, 1");
 		
 		lblGeneracinMximaPermitida = new JLabel("Generaci\u00F3n m\u00E1xima permitida");
 		lblGeneracinMximaPermitida.setHorizontalAlignment(SwingConstants.CENTER);
 		lblGeneracinMximaPermitida.setFont(new Font("Tahoma", Font.ITALIC, 14));
-		panelConfig.add(lblGeneracinMximaPermitida, "11, 24");
+		panelConfig.add(lblGeneracinMximaPermitida, "9, 24, 3, 1");
 		
 		
 		JPanel panelSur = new JPanel();
@@ -396,7 +407,7 @@ public class DialogConfiguracion extends JDialog {
 		GenerarPoblacion genPob = null;
 		switch ( metodosGeneracion.getSelectedIndex() ){
 			case 0 : genPob = new GenerarPoblacionRandom();	break;
-		//case 1 :
+		    case 1 : genPob = new GenerarPoblacionRandomSinRepeticiones(); break;
 	}
 		
 		SeleccionPadres selPad = null ;
