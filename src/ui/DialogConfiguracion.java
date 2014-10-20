@@ -352,6 +352,7 @@ public class DialogConfiguracion extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				if ( ! hayInconsistencias() ){
 					crearConfig();
+					
 				}
 					
 			}

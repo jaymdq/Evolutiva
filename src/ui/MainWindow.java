@@ -80,6 +80,9 @@ public class MainWindow {
 				    LanguageManager.setDefaultLanguage(LanguageConstants.SPANISH);
 					WebLookAndFeel.install();
 					
+					// System.setOut(new PrintStream("salidas.txt"));
+					// System.setErr(new PrintStream("errores.txt"));
+					 	 
 					//Lanzamos la ventana
 					MainWindow window = new MainWindow();
 					window.frame.setVisible(true);
@@ -429,7 +432,7 @@ public class MainWindow {
 		try{
 		consola.escribirSalto("Fin de la Ejecución : " + info.getHoraFecha());
 		
-		consola.escribirSalto("Se llegó al límite de generaciones permitidas y no se encontró una solución.");
+		consola.escribirSalto("Se llegó al límite de generaciones permitidas o se canceló la ejecución: no se encontró una solución.");
 		} catch(Exception e) {}
 		
 		//Aviso que no se encontró una solución.
