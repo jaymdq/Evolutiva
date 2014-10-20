@@ -88,7 +88,7 @@ public class info {
 		int hora = fecha.get(Calendar.HOUR_OF_DAY);
 		int minuto = fecha.get(Calendar.MINUTE);
 		int segundo = fecha.get(Calendar.SECOND);
-		return "" + dia + "/" + (mes+1) + "/" + año + " a las "+hora+":"+minuto+":"+segundo +".\n";
+		return "" + dia + "/" + (mes+1) + "/" + año + " a las "+hora+":"+minuto+":"+segundo +".";
 	}
 
 	public static String getHoraFechaArchivo() {

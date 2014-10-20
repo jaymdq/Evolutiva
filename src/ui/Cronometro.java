@@ -77,6 +77,9 @@ public class Cronometro implements Runnable{
 		
 	}
 	
+	public String toString(){
+		return tiempo.getText();
+	}
 
 
 }

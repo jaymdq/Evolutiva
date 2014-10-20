@@ -63,8 +63,8 @@ public class MainWindow {
 	private String titulo = "Trabajo Práctico Ubicador de Aviones - Introducción a la Computación Evolutiva.";
 	private Configuracion config = null;
 	private Thread threadEjecucion;
-	private Cronometro cronometro;
-	private WebStatusLabel tiempo;
+	private static Cronometro cronometro;
+	private static WebStatusLabel tiempo;
 	private static WebButton button;
 	DialogConfiguracion dialogConfig;
 	
@@ -293,12 +293,12 @@ public class MainWindow {
 					fos.write(consola.getTexto().getBytes());
 					fos.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
+			
 				e.printStackTrace();
 			}
 		}
@@ -325,8 +325,17 @@ public class MainWindow {
 
 	public static void dibujarAviones(Vector<Integer> solucion){ 
 
-		consola.escribirSalto("Fin de la Ejecución : " + info.getHoraFecha());
+		//Paramos al reloj.
+		cronometro.cronometroActivo = false;
+		//Sincronizamos el texto por pantalla y el cronometro.
+		try {
+			Thread.currentThread();
+			Thread.sleep(5);
+		} catch (InterruptedException e) {}
+		tiempo.setText(cronometro.toString());		
 		
+		consola.escribirSalto("Fin de la Ejecución : " + info.getHoraFecha());
+		consola.escribirSalto("Tiempo de Ejecución : " + tiempo.getText());
 		consola.escribirSalto("Solución :");
 		
 		/* SOLUCION GIRADA
@@ -417,9 +426,11 @@ public class MainWindow {
 
 	public static void noSeEncontroSolucion(boolean doclick) {
 		
+		try{
 		consola.escribirSalto("Fin de la Ejecución : " + info.getHoraFecha());
 		
 		consola.escribirSalto("Se llegó al límite de generaciones permitidas y no se encontró una solución.");
+		} catch(Exception e) {}
 		
 		//Aviso que no se encontró una solución.
 		 final WebNotificationPopup notificationPopup = new WebNotificationPopup ();

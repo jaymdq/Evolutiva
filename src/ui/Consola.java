@@ -28,21 +28,21 @@ public class Consola {
 		scroll.setPreferredSize ( null );
 		//Hacer que baje el documento a medida que se escribe
 		DefaultCaret caret = (DefaultCaret) text.getCaret();
-        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 	}
-	
+
 	public void escribir(String linea){
 		text.append(linea);
 	}
-	
-	public void escribirSalto(String linea){
+
+	public void escribirSalto(final String linea){
 		text.append(linea+"\n");
 	}
-	
+
 	public void limpiar(){
 		text.clear();
 	}
-	
+
 	public Component getComponent(){
 		return scroll;
 	}

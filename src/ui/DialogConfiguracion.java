@@ -66,8 +66,6 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.SwingConstants;
 
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 public class DialogConfiguracion extends JDialog {
 
