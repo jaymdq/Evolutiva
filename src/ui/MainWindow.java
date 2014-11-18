@@ -67,6 +67,8 @@ public class MainWindow {
 	private static WebStatusLabel tiempo;
 	private static WebButton button;
 	DialogConfiguracion dialogConfig;
+	private Vector<Configuracion> configuraciones = new Vector<Configuracion>();
+	private boolean automatizado;
 	
 	/**
 	 * Launch the application.
@@ -398,7 +400,27 @@ public class MainWindow {
 		consola.escribirSalto(info.configPc());
 	}
 
-	private void ejecutar() {		
+	private void ejecutar() {	
+		if (automatizado)
+		{
+			for (Configuracion c : configuraciones){
+				//Ejecutamos la configuracion actual
+				//Seguro que habra que retocar el metodo para parar la ejecucion
+				consola.limpiar();
+				consola.escribirSalto(config.toString());
+				consola.escribirSalto(info.configPc());
+				
+				AlgoritmoGenetico algoritmo = new AlgoritmoGenetico(this.config,consola);
+				
+				//Mostramos la fecha
+				consola.escribirSalto("Comienzo de la ejecución : " + info.getHoraFecha());
+				
+				threadEjecucion = new Thread(algoritmo);
+				cronometro.empezar();
+				threadEjecucion.start();
+			}
+		}
+		else
 		if (config != null){
 			consola.limpiar();
 			consola.escribirSalto(config.toString());
@@ -456,6 +478,13 @@ public class MainWindow {
 
 		//Escribimos a Archivo
 		escribirAArchivo();
+		
+	}
+
+	public void setConfigAutomatizada(Vector<Configuracion> configuraciones) {
+
+		this.configuraciones  = configuraciones;
+		automatizado = true;
 		
 	}
 }

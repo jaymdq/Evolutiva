@@ -93,6 +93,7 @@ public class DialogConfiguracion extends JDialog {
 	private JLabel lblGeneracinMximaPermitida;
 	private WebSpinner generacionesMaximas;
 	private JLabel lblNewLabel_2;
+	private JButton btnConfiguracinAutomatizada;
 	
 	@SuppressWarnings("static-access")
 	public DialogConfiguracion(MainWindow mainWindow) {
@@ -357,6 +358,17 @@ public class DialogConfiguracion extends JDialog {
 					
 			}
 		});
+		
+		btnConfiguracinAutomatizada = new JButton("Configuraci\u00F3n Automatizada");
+		btnConfiguracinAutomatizada.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (! hayInconsistencias() ){
+					crearConfigAutomatizada();
+				}
+			}
+		});
+		btnConfiguracinAutomatizada.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		panelSur.add(btnConfiguracinAutomatizada);
 		botonAceptar.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		panelSur.add(botonAceptar);
 		
@@ -372,6 +384,18 @@ public class DialogConfiguracion extends JDialog {
 	
 	}
 	
+	private void crearConfigAutomatizada() {
+		Integer n = (Integer) aviones.getValue();
+		Integer tam = (Integer) sizePoblacion.getValue();
+		Double probC = (Double) probCruce.getValue();
+		Double probM = (Double) probMutacion.getValue();
+		Long genMax = (Long) generacionesMaximas.getValue();
+		
+		ConfiguracionAutomatizada config = new ConfiguracionAutomatizada(n,tam,probC,probM,genMax,(Integer)nn.getValue(),(Integer)k.getValue());
+		
+		main.setConfigAutomatizada(config.getConfiguraciones());
+	}
+
 	private boolean hayInconsistencias() {
 		boolean salida = false;
 		//Steady-State
