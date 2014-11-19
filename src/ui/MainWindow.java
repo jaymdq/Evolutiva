@@ -410,7 +410,7 @@ public class MainWindow {
 		
 		if (automatizado &&  t_lanzador == null)
 		{
-			LanzadorDeConfiguraciones lanzador = new LanzadorDeConfiguraciones(this,consola,cronometro,threadEjecucion,configuraciones);	
+			LanzadorDeConfiguraciones lanzador = new LanzadorDeConfiguraciones(consola,cronometro,threadEjecucion,configuraciones);	
 			t_lanzador = new Thread(lanzador);
 			t_lanzador.start();
 		}

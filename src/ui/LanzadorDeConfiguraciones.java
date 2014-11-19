@@ -7,23 +7,18 @@ import algoritmoGenetico.Configuracion;
 
 public class LanzadorDeConfiguraciones implements Runnable {
 
-
-
-
 	private Consola consola;
 	private Cronometro cronometro;
 	private Thread threadEjecucion;
 	private Vector<Configuracion> configuraciones;
-	private MainWindow main;
 
-	public LanzadorDeConfiguraciones(MainWindow main,Consola consola, Cronometro cronometro,
+	public LanzadorDeConfiguraciones(Consola consola, Cronometro cronometro,
 			Thread threadEjecucion, Vector<Configuracion> configuraciones) {
 
 		this.consola = consola;
 		this.cronometro = cronometro;
 		this.threadEjecucion = threadEjecucion;
 		this.configuraciones = configuraciones;
-		this.main = main;
 
 	}
 
