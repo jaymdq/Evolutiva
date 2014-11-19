@@ -79,32 +79,32 @@ public class info {
 		//Instanciamos el objeto Calendar
 		//en fecha obtenemos la fecha y hora del sistema
 		Calendar fecha = new GregorianCalendar();
-		//Obtenemos el valor del año, mes, día,
+		//Obtenemos el valor del aÃ±o, mes, dÃ­a,
 		//hora, minuto y segundo del sistema
-		//usando el método get y el parámetro correspondiente
-		int año = fecha.get(Calendar.YEAR);
+		//usando el mÃ©todo get y el parÃ¡metro correspondiente
+		int aÃ±o = fecha.get(Calendar.YEAR);
 		int mes = fecha.get(Calendar.MONTH);
 		int dia = fecha.get(Calendar.DAY_OF_MONTH);
 		int hora = fecha.get(Calendar.HOUR_OF_DAY);
 		int minuto = fecha.get(Calendar.MINUTE);
 		int segundo = fecha.get(Calendar.SECOND);
-		return "" + dia + "/" + (mes+1) + "/" + año + " a las "+hora+":"+minuto+":"+segundo +".";
+		return "" + dia + "/" + (mes+1) + "/" + aÃ±o + " a las "+hora+":"+minuto+":"+segundo +".";
 	}
 
 	public static String getHoraFechaArchivo() {
 		//Instanciamos el objeto Calendar
 		//en fecha obtenemos la fecha y hora del sistema
 		Calendar fecha = new GregorianCalendar();
-		//Obtenemos el valor del año, mes, día,
+		//Obtenemos el valor del aÃ±o, mes, dÃ­a,
 		//hora, minuto y segundo del sistema
-		//usando el método get y el parámetro correspondiente
-		int año = fecha.get(Calendar.YEAR);
+		//usando el mÃ©todo get y el parÃ¡metro correspondiente
+		int aÃ±o = fecha.get(Calendar.YEAR);
 		int mes = fecha.get(Calendar.MONTH);
 		int dia = fecha.get(Calendar.DAY_OF_MONTH);
 		int hora = fecha.get(Calendar.HOUR_OF_DAY);
 		int minuto = fecha.get(Calendar.MINUTE);
 		int segundo = fecha.get(Calendar.SECOND);
-		return "Solución_" + dia + "_" + (mes+1) + "_" +año + "__"+hora+"hs_"+minuto+"min_"+segundo +"segs";
+		return "SoluciÃ³n_" + dia + "_" + (mes+1) + "_" +aÃ±o + "__"+hora+"hs_"+minuto+"min_"+segundo +"segs";
 	}
 
 }

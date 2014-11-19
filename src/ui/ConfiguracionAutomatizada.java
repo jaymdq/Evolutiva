@@ -38,7 +38,7 @@ public class ConfiguracionAutomatizada {
 	private Integer k;
 
 	public ConfiguracionAutomatizada(Integer nAviones, Integer tamPob,
-			Double probCru, Double probMut, Long genMax,Integer nn, Integer k) {
+			Double probCru, Double probMut, Long genMax, Integer nn, Integer k) {
 		this.nAviones = nAviones;
 		this.tamPob = tamPob;
 		this.probCru = probCru;
@@ -48,71 +48,90 @@ public class ConfiguracionAutomatizada {
 		this.k = k;
 	}
 
-	public Vector<Configuracion> getConfiguraciones(){
+	public Vector<Configuracion> getConfiguraciones() {
 		Vector<Configuracion> salida = new Vector<Configuracion>();
 
-		Integer metodoGeneracion = 0;
-		Integer metodoSeleccion = 0;
-		Integer operadorCruce = 0;
-		Integer operadorMutacion = 0;
-		Integer metodoSobrevivientes = 0;
-		Integer corte = 0;
-		Integer fit = 0;
+		CondicionCorte condicion = new CondicionCorte1Solucion();
+		Evaluacion eval = new Evaluacion1toN();
 
-	
-			GenerarPoblacion genPob = null;
-			switch ( metodoGeneracion ){
-			case 0 : genPob = new GenerarPoblacionRandom();	break;
-			case 1 : genPob = new GenerarPoblacionRandomSinRepeticiones(); break;
+		for (int metodoGeneración = 0; metodoGeneración < 1; metodoGeneración++) {
+			for (int metodoSeleccion = 0; metodoSeleccion < 1; metodoSeleccion++) {
+				for (int operadorCruce = 0; operadorCruce < 2; operadorCruce++) {
+					for (int operadorMutacion = 0; operadorMutacion < 3; operadorMutacion++) {
+						for (int metodoSobrevivientes = 0; metodoSobrevivientes < 1; metodoSobrevivientes++) {
+
+							GenerarPoblacion genPob = null;
+							switch (metodoGeneración) {
+							case 0:
+								genPob = new GenerarPoblacionRandom();
+								break;
+							case 1:
+								genPob = new GenerarPoblacionRandomSinRepeticiones();
+								break;
+							}
+
+							SeleccionPadres selPad = null;
+							switch (metodoSeleccion) {
+							case 0:
+								selPad = new SeleccionPadreTorneo(k);
+								break;
+							case 1:
+								selPad = new SeleccionPadreRuleta();
+								break;
+							}
+
+							Cruzamiento cruza = null;
+							switch (operadorCruce) {
+							case 0:
+								cruza = new C1Punto();
+								break;
+							case 1:
+								cruza = new CCiclos();
+								break;
+							case 2:
+								cruza = new Cpmx();
+								break;
+							}
+
+							Mutacion mutacion = null;
+							switch (operadorMutacion) {
+							case 0:
+								mutacion = new MIntercambio();
+								break;
+							case 1:
+								mutacion = new MInversion();
+								break;
+							case 2:
+								mutacion = new MMezcla();
+								break;
+							case 3:
+								mutacion = new MInsercion();
+								break;
+							}
+
+							SeleccionSobrevivientes selSob = null;
+							switch (metodoSobrevivientes) {
+							case 0:
+								selSob = new SeleccionSobrevivienteSteadyState(
+										nn);
+								break;
+							case 1:
+								selSob = new SeleccionSobrevivientesRanking();
+								break;
+							}
+
+							// Se hace la configuracion
+							Configuracion config = new Configuracion(nAviones,
+									genPob, selPad, cruza, mutacion, selSob,
+									tamPob, probCru, probMut, condicion, eval,
+									genMax);
+
+							salida.add(config);
+						}
+					}
+				}
 			}
-
-			SeleccionPadres selPad = null ;
-			switch ( metodoSeleccion ){
-			case 0 : selPad = new SeleccionPadreTorneo(k); break;
-			case 1 : selPad = new SeleccionPadreRuleta(); break;
-			}
-
-			Cruzamiento cruza = null;
-
-			switch (operadorCruce){
-			case 0 : cruza = new C1Punto(); break;
-			case 1 : cruza = new CCiclos(); break;
-			case 2 : cruza = new Cpmx(); break;
-			}
-
-			Mutacion mutacion = null;
-
-			switch (operadorMutacion){
-			case 0 : mutacion = new MIntercambio(); break;
-			case 1 : mutacion = new MInversion(); break;
-			case 2 : mutacion = new MMezcla(); break;
-			case 3 : mutacion = new MInsercion(); break;
-			}
-
-
-			SeleccionSobrevivientes selSob = null;
-
-			switch(metodoSobrevivientes){
-			case 0 : selSob = new SeleccionSobrevivienteSteadyState(nn); break;
-			case 1 : selSob = new SeleccionSobrevivientesRanking(); break;
-			}
-			
-			//Estos por ahora tienen un solo elemento para elegir
-			CondicionCorte condicion = null;
-			switch(corte){
-			case 0 : condicion = new CondicionCorte1Solucion(); break;
-			}
-
-			Evaluacion eval = null;
-			switch(fit){
-			case 0 : eval = new Evaluacion1toN(); break;
-			}
-			
-			
-			//Se hace la configuracion
-			Configuracion config = new Configuracion(nAviones,genPob,selPad,cruza,mutacion,selSob,tamPob,probCru,probMut,condicion,eval,genMax);
-
-			salida.add(config);
+		}
 
 		return salida;
 	}
@@ -156,6 +175,5 @@ public class ConfiguracionAutomatizada {
 	public void setGenMax(Long genMax) {
 		this.genMax = genMax;
 	}
-
 
 }
