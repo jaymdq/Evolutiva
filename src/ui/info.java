@@ -82,13 +82,13 @@ public class info {
 		//Obtenemos el valor del año, mes, día,
 		//hora, minuto y segundo del sistema
 		//usando el método get y el parámetro correspondiente
-		int año = fecha.get(Calendar.YEAR);
+		int anio = fecha.get(Calendar.YEAR);
 		int mes = fecha.get(Calendar.MONTH);
 		int dia = fecha.get(Calendar.DAY_OF_MONTH);
 		int hora = fecha.get(Calendar.HOUR_OF_DAY);
 		int minuto = fecha.get(Calendar.MINUTE);
 		int segundo = fecha.get(Calendar.SECOND);
-		return "" + dia + "/" + (mes+1) + "/" + año + " a las "+hora+":"+minuto+":"+segundo +".";
+		return "" + dia + "/" + (mes+1) + "/" + anio + " a las "+hora+":"+minuto+":"+segundo +".";
 	}
 
 	public static String getHoraFechaArchivo() {
@@ -98,13 +98,13 @@ public class info {
 		//Obtenemos el valor del año, mes, día,
 		//hora, minuto y segundo del sistema
 		//usando el método get y el parámetro correspondiente
-		int año = fecha.get(Calendar.YEAR);
+		int anio = fecha.get(Calendar.YEAR);
 		int mes = fecha.get(Calendar.MONTH);
 		int dia = fecha.get(Calendar.DAY_OF_MONTH);
 		int hora = fecha.get(Calendar.HOUR_OF_DAY);
 		int minuto = fecha.get(Calendar.MINUTE);
 		int segundo = fecha.get(Calendar.SECOND);
-		return "Solución_" + dia + "_" + (mes+1) + "_" +año + "__"+hora+"hs_"+minuto+"min_"+segundo +"segs";
+		return "Soluci�n_" + dia + "_" + (mes+1) + "_" +anio + "__"+hora+"hs_"+minuto+"min_"+segundo +"segs";
 	}
 
 }

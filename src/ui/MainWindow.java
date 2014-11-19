@@ -403,22 +403,10 @@ public class MainWindow {
 	private void ejecutar() {	
 		if (automatizado)
 		{
-			for (Configuracion c : configuraciones){
-				//Ejecutamos la configuracion actual
-				//Seguro que habra que retocar el metodo para parar la ejecucion
-				consola.limpiar();
-				consola.escribirSalto(config.toString());
-				consola.escribirSalto(info.configPc());
-				
-				AlgoritmoGenetico algoritmo = new AlgoritmoGenetico(this.config,consola);
-				
-				//Mostramos la fecha
-				consola.escribirSalto("Comienzo de la ejecución : " + info.getHoraFecha());
-				
-				threadEjecucion = new Thread(algoritmo);
-				cronometro.empezar();
-				threadEjecucion.start();
-			}
+			
+				LanzadorDeConfiguraciones lanzador = new LanzadorDeConfiguraciones(consola,cronometro,threadEjecucion,configuraciones);	
+				Thread t = new Thread(lanzador);
+				t.start();
 		}
 		else
 		if (config != null){

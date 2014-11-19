@@ -54,14 +54,14 @@ public class ConfiguracionAutomatizada {
 		CondicionCorte condicion = new CondicionCorte1Solucion();
 		Evaluacion eval = new Evaluacion1toN();
 
-		for (int metodoGeneración = 0; metodoGeneración < 1; metodoGeneración++) {
+		for (int metodoGeneracion = 0; metodoGeneracion < 1; metodoGeneracion++) {
 			for (int metodoSeleccion = 0; metodoSeleccion < 1; metodoSeleccion++) {
 				for (int operadorCruce = 0; operadorCruce < 2; operadorCruce++) {
 					for (int operadorMutacion = 0; operadorMutacion < 3; operadorMutacion++) {
 						for (int metodoSobrevivientes = 0; metodoSobrevivientes < 1; metodoSobrevivientes++) {
 
 							GenerarPoblacion genPob = null;
-							switch (metodoGeneración) {
+							switch (metodoGeneracion) {
 							case 0:
 								genPob = new GenerarPoblacionRandom();
 								break;

@@ -41,8 +41,8 @@ public class SeleccionPadreTorneo implements SeleccionPadres {
 			//Ordeno el vector torneo para obtener al ganador.
 			Collections.sort(torneo);
 			//Agrego al ganador como primer padre y lo borro del conjunto.
-			pareja.add(torneo.firstElement());
-			conjunto.remove(torneo.firstElement());
+			pareja.add(torneo.lastElement());
+			conjunto.remove(torneo.lastElement());
 			//Borro el vector de torneo.
 			torneo.clear();
 			
@@ -61,8 +61,8 @@ public class SeleccionPadreTorneo implements SeleccionPadres {
 			//Ordeno el vector torneo para obtener al ganador.
 			Collections.sort(torneo);
 			//Agrego al ganador como segundo padre y lo borro del conjunto.
-			pareja.add(torneo.firstElement());
-			conjunto.remove(torneo.firstElement());
+			pareja.add(torneo.lastElement());
+			conjunto.remove(torneo.lastElement());
 			
 			//Agrego la pareja obtenida
 			salida.add(pareja);
