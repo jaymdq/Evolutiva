@@ -54,11 +54,11 @@ public class ConfiguracionAutomatizada {
 		CondicionCorte condicion = new CondicionCorte1Solucion();
 		Evaluacion eval = new Evaluacion1toN();
 
-		for (int metodoGeneracion = 0; metodoGeneracion < 1; metodoGeneracion++) {
-			for (int metodoSeleccion = 0; metodoSeleccion < 1; metodoSeleccion++) {
-				for (int operadorCruce = 0; operadorCruce < 2; operadorCruce++) {
-					for (int operadorMutacion = 0; operadorMutacion < 3; operadorMutacion++) {
-						for (int metodoSobrevivientes = 0; metodoSobrevivientes < 1; metodoSobrevivientes++) {
+		for (int metodoGeneracion = 0; metodoGeneracion <= 1; metodoGeneracion++) {
+			for (int metodoSeleccion = 0; metodoSeleccion <= 1; metodoSeleccion++) {
+				for (int operadorCruce = 0; operadorCruce <= 2; operadorCruce++) {
+					for (int operadorMutacion = 0; operadorMutacion <= 3; operadorMutacion++) {
+						for (int metodoSobrevivientes = 0; metodoSobrevivientes <= 1; metodoSobrevivientes++) {
 
 							GenerarPoblacion genPob = null;
 							switch (metodoGeneracion) {
@@ -125,8 +125,10 @@ public class ConfiguracionAutomatizada {
 									genPob, selPad, cruza, mutacion, selSob,
 									tamPob, probCru, probMut, condicion, eval,
 									genMax);
-
-							salida.add(config);
+							
+							//Se agregan varias veces a proposito
+							for (int i = 0; i < 5; i++)
+								salida.add(config);
 						}
 					}
 				}

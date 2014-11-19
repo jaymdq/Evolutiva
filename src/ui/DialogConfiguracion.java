@@ -394,6 +394,7 @@ public class DialogConfiguracion extends JDialog {
 		ConfiguracionAutomatizada config = new ConfiguracionAutomatizada(n,tam,probC,probM,genMax,(Integer)nn.getValue(),(Integer)k.getValue());
 		
 		main.setConfigAutomatizada(config.getConfiguraciones());
+		this.setVisible(false);
 	}
 
 	private boolean hayInconsistencias() {

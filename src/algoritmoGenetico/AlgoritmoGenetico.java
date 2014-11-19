@@ -13,6 +13,7 @@ public class AlgoritmoGenetico implements Runnable{
 
 	private Configuracion configuracion;
 	private Consola consola;
+	private boolean activo;
 
 	public AlgoritmoGenetico(Configuracion config,Consola consola) {
 		this.configuracion = config;
@@ -51,7 +52,7 @@ public class AlgoritmoGenetico implements Runnable{
 
 		//System.out.println("1. poblacion inicial : " + poblacion);
 
-		while( ! configuracion.getCondicionCorte().corto(poblacion,iteraciones,configuracion.getGenMax()) && ! Thread.currentThread().isInterrupted() ){
+		while( ! configuracion.getCondicionCorte().corto(poblacion,iteraciones,configuracion.getGenMax()) && activo ){
 
 			//Estadisticas
 			iteraciones++;
@@ -113,22 +114,23 @@ public class AlgoritmoGenetico implements Runnable{
 
 	@Override
 	public void run() {
+		MainWindow.ejecutando = true;
+		this.activo = true;
 		Vector<Integer> solucion;
 		solucion = getSolucion();
-		if (solucion != null && !Thread.currentThread().isInterrupted()){
+		if (solucion != null && activo){
 			//System.out.println(solucion);
 			MainWindow.dibujarAviones(solucion);
 		}else
 		{
 			//System.out.println("Ejecución Interrumpida o se llego al limite maximo");
-			MainWindow.noSeEncontroSolucion(Thread.currentThread().isInterrupted());
+			MainWindow.noSeEncontroSolucion(  );
 		}
+		MainWindow.ejecutando = false;
 	}
 
 	public void terminar(){
-		try {
-			Thread.currentThread().interrupt();
-		} catch (Exception e) { }
+		this.activo = false;
 	}
 
 }

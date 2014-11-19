@@ -67,9 +67,11 @@ public class MainWindow {
 	private static WebStatusLabel tiempo;
 	private static WebButton button;
 	DialogConfiguracion dialogConfig;
-	private Vector<Configuracion> configuraciones = new Vector<Configuracion>();
-	private boolean automatizado;
-	
+	private static Vector<Configuracion> configuraciones = new Vector<Configuracion>();
+	public static boolean automatizado;
+	private static Thread t_lanzador;
+	public static boolean ejecutando = false;
+
 	/**
 	 * Launch the application.
 	 */
@@ -79,12 +81,12 @@ public class MainWindow {
 			public void run() {
 				try {
 					//Look and feel
-				    LanguageManager.setDefaultLanguage(LanguageConstants.SPANISH);
+					LanguageManager.setDefaultLanguage(LanguageConstants.SPANISH);
 					WebLookAndFeel.install();
-					
+
 					// System.setOut(new PrintStream("salidas.txt"));
 					// System.setErr(new PrintStream("errores.txt"));
-					 	 
+
 					//Lanzamos la ventana
 					MainWindow window = new MainWindow();
 					window.frame.setVisible(true);
@@ -110,18 +112,18 @@ public class MainWindow {
 		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(MainWindow.class.getResource("/imagenes/Avion.png")));
 		frame.setTitle(titulo);
 		frame.setBounds(0,0,java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().width,java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().height);
-		
+
 		frame.setLocationRelativeTo(null);
 		frame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
 
 		JMenu menuArchivo = new JMenu("Archivo");
 		menuArchivo.setMnemonic('a');
 		menuBar.add(menuArchivo);
-		
+
 		JMenuItem mntmNuevo = new JMenuItem("Nuevo..");
 		mntmNuevo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -131,7 +133,7 @@ public class MainWindow {
 		mntmNuevo.setIcon(new ImageIcon(MainWindow.class.getResource("/imagenes/file.png")));
 		mntmNuevo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));
 		menuArchivo.add(mntmNuevo);
-		
+
 		JMenuItem mntmSalir = new JMenuItem("Salir");
 		mntmSalir.setIcon(new ImageIcon(MainWindow.class.getResource("/imagenes/exit.png")));
 		mntmSalir.addActionListener(new ActionListener() {
@@ -144,7 +146,7 @@ public class MainWindow {
 		JMenu mnConfiguracin = new JMenu("Configuraci\u00F3n");
 		mnConfiguracin.setMnemonic('c');
 		menuBar.add(mnConfiguracin);
-		
+
 		JMenuItem mntmParmetrosDelAlgoritmo = new JMenuItem("Parámetros del Algoritmo");
 		mntmParmetrosDelAlgoritmo.setIcon(new ImageIcon(MainWindow.class.getResource("/imagenes/check1.png")));
 		mntmParmetrosDelAlgoritmo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.CTRL_MASK));
@@ -154,7 +156,7 @@ public class MainWindow {
 			}
 		});
 		mnConfiguracin.add(mntmParmetrosDelAlgoritmo);
-		
+
 		JMenuItem mntmDirectorioDeSalida = new JMenuItem("Directorio de Salida");
 		mntmDirectorioDeSalida.setIcon(new ImageIcon(MainWindow.class.getResource("/imagenes/folder.png")));
 		mntmDirectorioDeSalida.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
@@ -164,11 +166,11 @@ public class MainWindow {
 			}
 		});
 		mnConfiguracin.add(mntmDirectorioDeSalida);
-		
+
 		JMenu mnAcercaDe = new JMenu("Ayuda");
 		mnAcercaDe.setMnemonic('y');
 		menuBar.add(mnAcercaDe);
-		
+
 		JMenuItem mntmVerInforme = new JMenuItem("Ver Informe");
 		mntmVerInforme.setIcon(new ImageIcon(MainWindow.class.getResource("/imagenes/pdf.gif")));
 		mntmVerInforme.addActionListener(new ActionListener() {
@@ -178,7 +180,7 @@ public class MainWindow {
 		});
 		mntmVerInforme.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.CTRL_MASK));
 		mnAcercaDe.add(mntmVerInforme);
-		
+
 		JMenuItem mntmAcercaDe = new JMenuItem("Acerca De");
 		mntmAcercaDe.setIcon(new ImageIcon(MainWindow.class.getResource("/imagenes/about.png")));
 		mntmAcercaDe.addActionListener(new ActionListener() {
@@ -188,78 +190,78 @@ public class MainWindow {
 		});
 		mntmAcercaDe.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_MASK));
 		mnAcercaDe.add(mntmAcercaDe);
-		
+
 		JPanel panel = new JPanel();
 		frame.getContentPane().add(panel, BorderLayout.SOUTH);
-        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
-		
-        //Boton de Ejecutar / Parar
-        final ImageIcon start = new ImageIcon(MainWindow.class.getResource("/imagenes/start.png"));
-        final ImageIcon stop = new ImageIcon(MainWindow.class.getResource("/imagenes/stop.png"));
+		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
 
-        // Progress overlay
-        final WebProgressOverlay progressOverlay = new WebProgressOverlay ();
-        progressOverlay.setConsumeEvents ( false );
-        
-        // Progress state change button
-        button = new WebButton ( "Ejecutar", start );
-        button.setFontSize(16);
-        button.setEnabled(false);
-        button.setPreferredWidth(248);
-        button.setRound (9);
-        progressOverlay.setComponent ( button );
+		//Boton de Ejecutar / Parar
+		final ImageIcon start = new ImageIcon(MainWindow.class.getResource("/imagenes/start.png"));
+		final ImageIcon stop = new ImageIcon(MainWindow.class.getResource("/imagenes/stop.png"));
 
-        // Progress switch
-        button.addActionListener ( new ActionListener ()
-        {
-        	@Override
-        	public void actionPerformed ( ActionEvent e )
-        	{
-        		boolean showLoad = !progressOverlay.isShowLoad ();
+		// Progress overlay
+		final WebProgressOverlay progressOverlay = new WebProgressOverlay ();
+		progressOverlay.setConsumeEvents ( false );
 
-        		// Changing progress visibility
-        		progressOverlay.setShowLoad ( showLoad );
+		// Progress state change button
+		button = new WebButton ( "Ejecutar", start );
+		button.setFontSize(16);
+		button.setEnabled(false);
+		button.setPreferredWidth(248);
+		button.setRound (9);
+		progressOverlay.setComponent ( button );
 
-        		// Changing buttons text and icons
-        		button.setText ( showLoad ? "Parar" : "Ejecutar" );
-        		button.setIcon ( showLoad ? stop : start );
-        		if (showLoad){
-        			ejecutar();
-        		}else
-        			pararEjecucion();
-        	}
-        } );
+		// Progress switch
+		button.addActionListener ( new ActionListener ()
+		{
+			@Override
+			public void actionPerformed ( ActionEvent e )
+			{
+				boolean showLoad = !progressOverlay.isShowLoad ();
 
-        //Barra de Estado
-        WebStatusBar statusBar = new WebStatusBar ();
-        statusBar.add(progressOverlay,ToolbarLayout.START);
-      
-        tiempo = new WebStatusLabel ( "00:00:00:000");
-        tiempo.setFontSize(16);
-        statusBar.add(tiempo, ToolbarLayout.MIDDLE);
-        WebMemoryBar memoryBar = new WebMemoryBar ();
-        memoryBar.setFontSize(16);
-        memoryBar.setPreferredWidth ( memoryBar.getPreferredSize ().width + 100 );
-        statusBar.add ( memoryBar, ToolbarLayout.END );
-        panel.add(statusBar);
-        
-        JPanel panelTexto = new JPanel();
-        panelTexto.setForeground(Color.LIGHT_GRAY);
-        panelTexto.setBorder(null);
-        panelTexto.setLayout(new BoxLayout(panelTexto, BoxLayout.X_AXIS));
-        frame.getContentPane().add(panelTexto, BorderLayout.CENTER);
-        
-        //Cronometro
-        cronometro = new Cronometro(tiempo);
-        
-        //Consola
-        consola = new Consola();
-        panelTexto.add(consola.getComponent());
-        consola.escribirSalto("Bienvenidos");
-        
-        //Configuración
-        dialogConfig = new DialogConfiguracion(this);
-        
+				// Changing progress visibility
+				progressOverlay.setShowLoad ( showLoad );
+
+				// Changing buttons text and icons
+				button.setText ( showLoad ? "Parar" : "Ejecutar" );
+				button.setIcon ( showLoad ? stop : start );
+				if (showLoad){
+					ejecutar();
+				}else
+					pararEjecucion();
+			}
+		} );
+
+		//Barra de Estado
+		WebStatusBar statusBar = new WebStatusBar ();
+		statusBar.add(progressOverlay,ToolbarLayout.START);
+
+		tiempo = new WebStatusLabel ( "00:00:00:000");
+		tiempo.setFontSize(16);
+		statusBar.add(tiempo, ToolbarLayout.MIDDLE);
+		WebMemoryBar memoryBar = new WebMemoryBar ();
+		memoryBar.setFontSize(16);
+		memoryBar.setPreferredWidth ( memoryBar.getPreferredSize ().width + 100 );
+		statusBar.add ( memoryBar, ToolbarLayout.END );
+		panel.add(statusBar);
+
+		JPanel panelTexto = new JPanel();
+		panelTexto.setForeground(Color.LIGHT_GRAY);
+		panelTexto.setBorder(null);
+		panelTexto.setLayout(new BoxLayout(panelTexto, BoxLayout.X_AXIS));
+		frame.getContentPane().add(panelTexto, BorderLayout.CENTER);
+
+		//Cronometro
+		cronometro = new Cronometro(tiempo);
+
+		//Consola
+		consola = new Consola();
+		panelTexto.add(consola.getComponent());
+		consola.escribirSalto("Bienvenidos");
+
+		//Configuración
+		dialogConfig = new DialogConfiguracion(this);
+
 	}
 
 	private void nuevo() {
@@ -282,11 +284,11 @@ public class MainWindow {
 		if ( directoryChooser.getResult () == DialogOptions.OK_OPTION )
 		{
 			File file = directoryChooser.getSelectedDirectory ();
-			rutaDirectorio = file.getAbsolutePath();
+			rutaDirectorio = file.getAbsolutePath() + "\\";
 			frame.setTitle(titulo + "     Salida: " + rutaDirectorio);
 		}
 	}
-	
+
 	private static void escribirAArchivo(){
 		if (rutaDirectorio != null){
 			FileOutputStream fos;
@@ -294,23 +296,23 @@ public class MainWindow {
 				String fechahora = info.getHoraFechaArchivo();
 				fos = new FileOutputStream(rutaDirectorio+fechahora+".sol");
 				try {
-					consola.escribir("Archivo almacenado en " + rutaDirectorio + fechahora + ".sol");
+					consola.escribir("Archivo almacenado en " + rutaDirectorio +  fechahora + ".sol");
 					fos.write(consola.getTexto().getBytes());
 					fos.close();
 				} catch (IOException e) {
-					
+
 					e.printStackTrace();
 				}
 
 			} catch (FileNotFoundException e) {
-			
+
 				e.printStackTrace();
 			}
 		}
 
 	}
 
-	
+
 	private void mostrarAcercaDe() {
 		DialogAcercaDe diag = new DialogAcercaDe(this);
 		//Mostramos en pantalla
@@ -338,11 +340,11 @@ public class MainWindow {
 			Thread.sleep(5);
 		} catch (InterruptedException e) {}
 		tiempo.setText(cronometro.toString());		
-		
+
 		consola.escribirSalto("Fin de la Ejecución : " + info.getHoraFecha());
 		consola.escribirSalto("Tiempo de Ejecución : " + tiempo.getText());
 		consola.escribirSalto("Solución :");
-		
+
 		/* SOLUCION GIRADA
 		 for (int i = 1; i <= solucion.size(); i++){
 			for (int j = 1; j <= solucion.size(); j++){
@@ -350,14 +352,12 @@ public class MainWindow {
 					consola.escribir("X ");
 				}else
 					consola.escribir("O ");
-				
-				
 			} 
 			consola.escribirSalto("");
 		}
 		consola.escribirSalto("");
-		*/
-		
+		 */
+
 		//Solución Correcta
 		for (int i = 1; i <= solucion.size(); i++){
 			int pos = solucion.indexOf((int) i );
@@ -369,27 +369,30 @@ public class MainWindow {
 			}
 			consola.escribirSalto("");
 		}
-		
-		//Aviso que se encontró una solución.
-		 final WebNotificationPopup notificationPopup = new WebNotificationPopup ();
-         notificationPopup.setIcon ( new ImageIcon( Toolkit.getDefaultToolkit().getImage(MainWindow.class.getResource("/imagenes/plus.png")) ));
-         notificationPopup.setDisplayTime ( 5000 );
-         final WebClock clock = new WebClock ();
-         clock.setClockType ( ClockType.timer );
-         clock.setTimeLeft ( 5000 );
-         clock.setTimePattern ( "'Se encontró una solución.'" );
-         notificationPopup.setContent ( new GroupPanel ( clock ) );
-         NotificationManager.showNotification ( notificationPopup );
-         clock.start ();
- 
- 		//Necesario repintar la pantalla (sino no se updateaba el menuBar)
- 		frame.repaint();
- 		
- 		//Paro la animación del botón. !! DEJAR ACÁ ABAJO
- 		button.doClick();
 
- 		//Escribimos a Archivo
- 		escribirAArchivo();
+		if ( ! automatizado ){
+			//Aviso que se encontró una solución.
+			final WebNotificationPopup notificationPopup = new WebNotificationPopup ();
+			notificationPopup.setIcon ( new ImageIcon( Toolkit.getDefaultToolkit().getImage(MainWindow.class.getResource("/imagenes/plus.png")) ));
+			notificationPopup.setDisplayTime ( 5000 );
+			final WebClock clock = new WebClock ();
+			clock.setClockType ( ClockType.timer );
+			clock.setTimeLeft ( 5000 );
+			clock.setTimePattern ( "'Se encontró una solución.'" );
+			notificationPopup.setContent ( new GroupPanel ( clock ) );
+			NotificationManager.showNotification ( notificationPopup );
+			clock.start ();
+		}
+		//Necesario repintar la pantalla (sino no se updateaba el menuBar)
+		frame.repaint();
+
+		//Paro la animación del botón. !! DEJAR ACÁ ABAJO
+		if (!automatizado && t_lanzador == null)
+			doClick();
+		
+		//Escribimos a Archivo
+		escribirAArchivo();
+
 	}
 
 	public void setConfig(Configuracion config) {
@@ -398,31 +401,34 @@ public class MainWindow {
 		consola.limpiar();
 		consola.escribirSalto(config.toString());
 		consola.escribirSalto(info.configPc());
+		automatizado = false;
 	}
 
 	private void ejecutar() {	
-		if (automatizado)
+		if (!automatizado)
+			t_lanzador = null;
+		
+		if (automatizado &&  t_lanzador == null)
 		{
-			
-				LanzadorDeConfiguraciones lanzador = new LanzadorDeConfiguraciones(consola,cronometro,threadEjecucion,configuraciones);	
-				Thread t = new Thread(lanzador);
-				t.start();
+			LanzadorDeConfiguraciones lanzador = new LanzadorDeConfiguraciones(this,consola,cronometro,threadEjecucion,configuraciones);	
+			t_lanzador = new Thread(lanzador);
+			t_lanzador.start();
 		}
 		else
-		if (config != null){
-			consola.limpiar();
-			consola.escribirSalto(config.toString());
-			consola.escribirSalto(info.configPc());
-			
-			AlgoritmoGenetico algoritmo = new AlgoritmoGenetico(this.config,consola);
-			
-			//Mostramos la fecha
-			consola.escribirSalto("Comienzo de la ejecución : " + info.getHoraFecha());
-			
-			threadEjecucion = new Thread(algoritmo);
-			cronometro.empezar();
-			threadEjecucion.start();
-		}
+			if (config != null){
+				consola.limpiar();
+				consola.escribirSalto(config.toString());
+				consola.escribirSalto(info.configPc());
+
+				AlgoritmoGenetico algoritmo = new AlgoritmoGenetico(this.config,consola);
+
+				//Mostramos la fecha
+				consola.escribirSalto("Comienzo de la ejecución : " + info.getHoraFecha());
+
+				threadEjecucion = new Thread(algoritmo);
+				cronometro.empezar();
+				threadEjecucion.start();
+			}
 
 	}
 
@@ -430,49 +436,57 @@ public class MainWindow {
 		if (threadEjecucion != null && threadEjecucion.isAlive()){
 			threadEjecucion.interrupt();
 			//consola.escribirSalto("Ejecución interrumpida : " + info.getHoraFecha());
-			
+
 			System.gc();
 		}
 		//Paramos al reloj.
 		cronometro.cronometroActivo = false;
+
+		if (t_lanzador != null)
+			t_lanzador.interrupt();
+
 	}
 
-	public static void noSeEncontroSolucion(boolean doclick) {
-		
+	public static void noSeEncontroSolucion() {
+
 		try{
-		consola.escribirSalto("Fin de la Ejecución : " + info.getHoraFecha());
-		
-		consola.escribirSalto("Se llegó al límite de generaciones permitidas o se canceló la ejecución: no se encontró una solución.");
+			consola.escribirSalto("Fin de la Ejecución : " + info.getHoraFecha());
+
+			consola.escribirSalto("Se llegó al límite de generaciones permitidas o se canceló la ejecución: no se encontró una solución.");
 		} catch(Exception e) {}
-		
+
 		//Aviso que no se encontró una solución.
-		 final WebNotificationPopup notificationPopup = new WebNotificationPopup ();
-        notificationPopup.setIcon ( new ImageIcon( Toolkit.getDefaultToolkit().getImage(MainWindow.class.getResource("/imagenes/plus.png")) ));
-        notificationPopup.setDisplayTime ( 5000 );
-        final WebClock clock = new WebClock ();
-        clock.setClockType ( ClockType.timer );
-        clock.setTimeLeft ( 5000 );
-        clock.setTimePattern ( "'Se llegó al límite de generaciones permitidas y no se encontró una solución.'" );
-        notificationPopup.setContent ( new GroupPanel ( clock ) );
-        NotificationManager.showNotification ( notificationPopup );
-        clock.start ();
+		final WebNotificationPopup notificationPopup = new WebNotificationPopup ();
+		notificationPopup.setIcon ( new ImageIcon( Toolkit.getDefaultToolkit().getImage(MainWindow.class.getResource("/imagenes/plus.png")) ));
+		notificationPopup.setDisplayTime ( 5000 );
+		final WebClock clock = new WebClock ();
+		clock.setClockType ( ClockType.timer );
+		clock.setTimeLeft ( 5000 );
+		clock.setTimePattern ( "'Se llegó al límite de generaciones permitidas y no se encontró una solución.'" );
+		notificationPopup.setContent ( new GroupPanel ( clock ) );
+		NotificationManager.showNotification ( notificationPopup );
+		clock.start ();
 
 		//Necesario repintar la pantalla (sino no se updateaba el menuBar)
 		frame.repaint();
-		
-		//Paro la animación del botón. !! DEJAR ACÁ ABAJO
-		if (!doclick)
-			button.doClick();
 
+		if (!automatizado && t_lanzador == null)
+			doClick();
+		
 		//Escribimos a Archivo
 		escribirAArchivo();
-		
+
+	}
+
+	public static void doClick(){
+		button.doClick();
 	}
 
 	public void setConfigAutomatizada(Vector<Configuracion> configuraciones) {
 
 		this.configuraciones  = configuraciones;
 		automatizado = true;
-		
+		button.setEnabled(true);
+		consola.limpiar();
 	}
 }

@@ -14,21 +14,26 @@ public class LanzadorDeConfiguraciones implements Runnable {
 	private Cronometro cronometro;
 	private Thread threadEjecucion;
 	private Vector<Configuracion> configuraciones;
+	private MainWindow main;
 
-	public LanzadorDeConfiguraciones(Consola consola, Cronometro cronometro,
+	public LanzadorDeConfiguraciones(MainWindow main,Consola consola, Cronometro cronometro,
 			Thread threadEjecucion, Vector<Configuracion> configuraciones) {
 
 		this.consola = consola;
 		this.cronometro = cronometro;
 		this.threadEjecucion = threadEjecucion;
 		this.configuraciones = configuraciones;
+		this.main = main;
 
 	}
 
 	@Override
 	public void run() {
 
+	Integer i = 1;
 		for (Configuracion c : configuraciones){
+			
+			System.out.println("Se ejecuta la configuración: " + i);
 			
 			consola.limpiar();
 			consola.escribirSalto(c.toString());
@@ -43,14 +48,21 @@ public class LanzadorDeConfiguraciones implements Runnable {
 			cronometro.empezar();
 			threadEjecucion.start();
 			
-			while (threadEjecucion.isAlive()){
+			do {
 				try {
-					Thread.currentThread();
 					Thread.sleep(5000);
 				} catch (InterruptedException e) {}
-			}
+			} while (MainWindow.ejecutando);
 			
+			
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {}
+
+			i++;
 		}
+		System.out.println("Termino el lanzador");
+		MainWindow.automatizado = false;
 
 	}
 

@@ -22,11 +22,7 @@ public class SeleccionSobrevivientesRanking implements SeleccionSobrevivientes {
 		
 		Vector<Double> probs = new Vector<Double>();
 		Vector<Cromosoma> salida = new Vector<Cromosoma>();
-		System.out.println("Hijos : " + conjuntoHijos.size());
-		System.out.println("Padres : " + conjuntoPadres.size());
-		System.out.println("Total : " + total.size());
 		while (salida.size() != conjuntoPadres.size()) {
-			System.out.println("Salida : " + salida.size());
 			probs.clear();
 			for (int i = 0; i < total.size(); i++) {
 				probs.add(1.5/total.size() + i/(total.size() * (total.size() - 1)));
