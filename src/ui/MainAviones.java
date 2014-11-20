@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 
 import algoritmoGenetico.AlgoritmoGenetico;
 import algoritmoGenetico.Configuracion;
+import algoritmoGenetico.Solucion;
 
 import com.alee.extended.filechooser.WebDirectoryChooser;
 import com.alee.extended.layout.ToolbarLayout;
@@ -55,7 +56,7 @@ import java.awt.event.InputEvent;
 import java.awt.Color;
 
 
-public class MainWindow {
+public class MainAviones {
 
 	public static JFrame frame;
 	private static Consola consola;
@@ -71,6 +72,7 @@ public class MainWindow {
 	public static boolean automatizado;
 	private static Thread t_lanzador;
 	public static boolean ejecutando = false;
+	public static Vector<Solucion> soluciones = new Vector<Solucion>();
 
 	/**
 	 * Launch the application.
@@ -88,7 +90,7 @@ public class MainWindow {
 					// System.setErr(new PrintStream("errores.txt"));
 
 					//Lanzamos la ventana
-					MainWindow window = new MainWindow();
+					MainAviones window = new MainAviones();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -100,7 +102,7 @@ public class MainWindow {
 	/**
 	 * Create the application.
 	 */
-	public MainWindow() {
+	public MainAviones() {
 		initialize();
 	}
 
@@ -109,7 +111,7 @@ public class MainWindow {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(MainWindow.class.getResource("/imagenes/Avion.png")));
+		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(MainAviones.class.getResource("/imagenes/Avion.png")));
 		frame.setTitle(titulo);
 		frame.setBounds(0,0,java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().width,java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().height);
 
@@ -130,12 +132,12 @@ public class MainWindow {
 				nuevo();
 			}
 		});
-		mntmNuevo.setIcon(new ImageIcon(MainWindow.class.getResource("/imagenes/file.png")));
+		mntmNuevo.setIcon(new ImageIcon(MainAviones.class.getResource("/imagenes/file.png")));
 		mntmNuevo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));
 		menuArchivo.add(mntmNuevo);
 
 		JMenuItem mntmSalir = new JMenuItem("Salir");
-		mntmSalir.setIcon(new ImageIcon(MainWindow.class.getResource("/imagenes/exit.png")));
+		mntmSalir.setIcon(new ImageIcon(MainAviones.class.getResource("/imagenes/exit.png")));
 		mntmSalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				frame.dispose();
@@ -148,7 +150,7 @@ public class MainWindow {
 		menuBar.add(mnConfiguracin);
 
 		JMenuItem mntmParmetrosDelAlgoritmo = new JMenuItem("Parámetros del Algoritmo");
-		mntmParmetrosDelAlgoritmo.setIcon(new ImageIcon(MainWindow.class.getResource("/imagenes/check1.png")));
+		mntmParmetrosDelAlgoritmo.setIcon(new ImageIcon(MainAviones.class.getResource("/imagenes/check1.png")));
 		mntmParmetrosDelAlgoritmo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.CTRL_MASK));
 		mntmParmetrosDelAlgoritmo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -158,7 +160,7 @@ public class MainWindow {
 		mnConfiguracin.add(mntmParmetrosDelAlgoritmo);
 
 		JMenuItem mntmDirectorioDeSalida = new JMenuItem("Directorio de Salida");
-		mntmDirectorioDeSalida.setIcon(new ImageIcon(MainWindow.class.getResource("/imagenes/folder.png")));
+		mntmDirectorioDeSalida.setIcon(new ImageIcon(MainAviones.class.getResource("/imagenes/folder.png")));
 		mntmDirectorioDeSalida.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
 		mntmDirectorioDeSalida.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -172,7 +174,7 @@ public class MainWindow {
 		menuBar.add(mnAcercaDe);
 
 		JMenuItem mntmVerInforme = new JMenuItem("Ver Informe");
-		mntmVerInforme.setIcon(new ImageIcon(MainWindow.class.getResource("/imagenes/pdf.gif")));
+		mntmVerInforme.setIcon(new ImageIcon(MainAviones.class.getResource("/imagenes/pdf.gif")));
 		mntmVerInforme.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				mostrarInforme();
@@ -182,7 +184,7 @@ public class MainWindow {
 		mnAcercaDe.add(mntmVerInforme);
 
 		JMenuItem mntmAcercaDe = new JMenuItem("Acerca De");
-		mntmAcercaDe.setIcon(new ImageIcon(MainWindow.class.getResource("/imagenes/about.png")));
+		mntmAcercaDe.setIcon(new ImageIcon(MainAviones.class.getResource("/imagenes/about.png")));
 		mntmAcercaDe.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				mostrarAcercaDe();
@@ -196,8 +198,8 @@ public class MainWindow {
 		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
 
 		//Boton de Ejecutar / Parar
-		final ImageIcon start = new ImageIcon(MainWindow.class.getResource("/imagenes/start.png"));
-		final ImageIcon stop = new ImageIcon(MainWindow.class.getResource("/imagenes/stop.png"));
+		final ImageIcon start = new ImageIcon(MainAviones.class.getResource("/imagenes/start.png"));
+		final ImageIcon stop = new ImageIcon(MainAviones.class.getResource("/imagenes/stop.png"));
 
 		// Progress overlay
 		final WebProgressOverlay progressOverlay = new WebProgressOverlay ();
@@ -341,6 +343,11 @@ public class MainWindow {
 		} catch (InterruptedException e) {}
 		tiempo.setText(cronometro.toString());		
 
+		if (automatizado && t_lanzador != null){
+			soluciones.lastElement().setTiempo(cronometro.getMs());
+		}
+
+
 		consola.escribirSalto("Fin de la Ejecución : " + info.getHoraFecha());
 		consola.escribirSalto("Tiempo de Ejecución : " + tiempo.getText());
 		consola.escribirSalto("Solución :");
@@ -373,7 +380,7 @@ public class MainWindow {
 		if ( ! automatizado ){
 			//Aviso que se encontró una solución.
 			final WebNotificationPopup notificationPopup = new WebNotificationPopup ();
-			notificationPopup.setIcon ( new ImageIcon( Toolkit.getDefaultToolkit().getImage(MainWindow.class.getResource("/imagenes/plus.png")) ));
+			notificationPopup.setIcon ( new ImageIcon( Toolkit.getDefaultToolkit().getImage(MainAviones.class.getResource("/imagenes/plus.png")) ));
 			notificationPopup.setDisplayTime ( 5000 );
 			final WebClock clock = new WebClock ();
 			clock.setClockType ( ClockType.timer );
@@ -389,7 +396,7 @@ public class MainWindow {
 		//Paro la animación del botón. !! DEJAR ACÁ ABAJO
 		if (!automatizado && t_lanzador == null)
 			doClick();
-		
+
 		//Escribimos a Archivo
 		escribirAArchivo();
 
@@ -407,9 +414,10 @@ public class MainWindow {
 	private void ejecutar() {	
 		if (!automatizado)
 			t_lanzador = null;
-		
+
 		if (automatizado &&  t_lanzador == null)
 		{
+			soluciones.clear();
 			LanzadorDeConfiguraciones lanzador = new LanzadorDeConfiguraciones(consola,cronometro,threadEjecucion,configuraciones);	
 			t_lanzador = new Thread(lanzador);
 			t_lanzador.start();
@@ -418,7 +426,9 @@ public class MainWindow {
 			if (config != null){
 				consola.limpiar();
 				consola.escribirSalto(config.toString());
-				consola.escribirSalto(info.configPc());
+
+				//NO BORRAR ESTOO !! 
+				//consola.escribirSalto(info.configPc());
 
 				AlgoritmoGenetico algoritmo = new AlgoritmoGenetico(this.config,consola);
 
@@ -442,6 +452,10 @@ public class MainWindow {
 		//Paramos al reloj.
 		cronometro.cronometroActivo = false;
 
+		if (automatizado && t_lanzador != null){
+			soluciones.lastElement().setTiempo(cronometro.getMs());
+		}
+
 		if (t_lanzador != null)
 			t_lanzador.interrupt();
 
@@ -457,7 +471,7 @@ public class MainWindow {
 
 		//Aviso que no se encontró una solución.
 		final WebNotificationPopup notificationPopup = new WebNotificationPopup ();
-		notificationPopup.setIcon ( new ImageIcon( Toolkit.getDefaultToolkit().getImage(MainWindow.class.getResource("/imagenes/plus.png")) ));
+		notificationPopup.setIcon ( new ImageIcon( Toolkit.getDefaultToolkit().getImage(MainAviones.class.getResource("/imagenes/plus.png")) ));
 		notificationPopup.setDisplayTime ( 5000 );
 		final WebClock clock = new WebClock ();
 		clock.setClockType ( ClockType.timer );
@@ -472,7 +486,7 @@ public class MainWindow {
 
 		if (!automatizado && t_lanzador == null)
 			doClick();
-		
+
 		//Escribimos a Archivo
 		escribirAArchivo();
 
@@ -488,5 +502,44 @@ public class MainWindow {
 		automatizado = true;
 		button.setEnabled(true);
 		consola.limpiar();
+	}
+
+	public static void addNuevaSolucion(Solucion solution) {
+		soluciones.add(solution);
+
+	}
+
+	public static void calcularEstadisticas(){
+		//método que genera un archivo con las estadisticas!!
+		String salidaAEscribir = "";
+		Integer s_generadas = 5;
+		Integer i = 0;
+		Double iteracionesProm = (double) 0;
+		Double tiempoProm = (double)0;
+		Integer solucionesEncontradas = 0;
+		for (Solucion s : soluciones){
+
+			//Se hacen las estadisticas para un algoritmo en particular
+			iteracionesProm += s.getIteraciones();
+			tiempoProm += s.getTiempo();
+			if (s.EncontroSolucion())
+				solucionesEncontradas++;
+			
+			i++;
+			if (i == s_generadas){
+				//Se guarda el resultado del algoritmo
+				iteracionesProm = iteracionesProm / s_generadas;
+				tiempoProm = tiempoProm / s_generadas;
+				Double efectividad = (double) (solucionesEncontradas / s_generadas);
+				
+				
+				//Se reinicializan variables
+				i = 0;
+				iteracionesProm = (double) 0;
+				tiempoProm = (double) 0;
+				solucionesEncontradas = 0;
+			}
+
+		}
 	}
 }

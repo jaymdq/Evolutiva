@@ -32,7 +32,8 @@ public class LanzadorDeConfiguraciones implements Runnable {
 			
 			consola.limpiar();
 			consola.escribirSalto(c.toString());
-			consola.escribirSalto(info.configPc());
+			//NO BORRAR ESTOO !! 
+			//consola.escribirSalto(info.configPc());
 
 			AlgoritmoGenetico algoritmo = new AlgoritmoGenetico(c,consola);
 
@@ -47,7 +48,7 @@ public class LanzadorDeConfiguraciones implements Runnable {
 				try {
 					Thread.sleep(5000);
 				} catch (InterruptedException e) {}
-			} while (MainWindow.ejecutando);
+			} while (MainAviones.ejecutando);
 			
 			
 			try {
@@ -57,7 +58,8 @@ public class LanzadorDeConfiguraciones implements Runnable {
 			i++;
 		}
 		System.out.println("Termino el lanzador");
-		MainWindow.automatizado = false;
+		MainAviones.automatizado = false;
+		MainAviones.calcularEstadisticas();
 
 	}
 

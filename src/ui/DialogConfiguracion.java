@@ -14,6 +14,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 
 import algoritmoGenetico.Configuracion;
+import algoritmoGenetico.ConfiguracionAutomatizada;
 
 import com.alee.extended.layout.VerticalFlowLayout;
 import com.alee.extended.panel.SingleAlignPanel;
@@ -73,7 +74,7 @@ public class DialogConfiguracion extends JDialog {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private MainWindow main;
+	private MainAviones main;
 	private WebSpinner aviones;
 	private WebSpinner sizePoblacion;
 	private WebSpinner probCruce;
@@ -96,7 +97,7 @@ public class DialogConfiguracion extends JDialog {
 	private JButton btnConfiguracinAutomatizada;
 	
 	@SuppressWarnings("static-access")
-	public DialogConfiguracion(MainWindow mainWindow) {
+	public DialogConfiguracion(MainAviones mainWindow) {
 		super(mainWindow.frame, "Configuración", ModalityType.APPLICATION_MODAL);
 		main = mainWindow;
 		setIconImage(Toolkit.getDefaultToolkit().getImage(DialogConfiguracion.class.getResource("/imagenes/Avion.png")));

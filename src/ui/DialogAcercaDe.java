@@ -33,7 +33,7 @@ public class DialogAcercaDe extends JDialog {
 	private JPanel contentPanel = new JPanel();
 	
 	@SuppressWarnings("static-access")
-	public DialogAcercaDe(MainWindow mainWindow) {
+	public DialogAcercaDe(MainAviones mainWindow) {
 		super(mainWindow.frame, "Acerca De COMPLETAR", ModalityType.APPLICATION_MODAL);
 		setTitle("Ubicador de Aviones");
 		this.setResizable(false);

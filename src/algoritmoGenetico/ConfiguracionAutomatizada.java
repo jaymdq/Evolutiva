@@ -1,4 +1,4 @@
-package ui;
+package algoritmoGenetico;
 
 import fitness.Evaluacion;
 import fitness.Evaluacion1toN;
@@ -25,7 +25,6 @@ import cruzamiento.C1Punto;
 import cruzamiento.CCiclos;
 import cruzamiento.Cpmx;
 import cruzamiento.Cruzamiento;
-import algoritmoGenetico.Configuracion;
 
 public class ConfiguracionAutomatizada {
 

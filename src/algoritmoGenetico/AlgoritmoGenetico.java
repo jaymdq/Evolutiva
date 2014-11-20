@@ -6,7 +6,7 @@ import java.text.DecimalFormat;
 import java.util.Vector;
 
 import ui.Consola;
-import ui.MainWindow;
+import ui.MainAviones;
 import cromosoma.Cromosoma;
 
 public class AlgoritmoGenetico implements Runnable{
@@ -14,7 +14,8 @@ public class AlgoritmoGenetico implements Runnable{
 	private Configuracion configuracion;
 	private Consola consola;
 	private boolean activo;
-
+	private Long iteraciones;
+	
 	public AlgoritmoGenetico(Configuracion config,Consola consola) {
 		this.configuracion = config;
 		this.consola = consola;
@@ -23,7 +24,7 @@ public class AlgoritmoGenetico implements Runnable{
 	@SuppressWarnings("unchecked")
 	public Vector<Integer> getSolucion(){
 		//Variables auxiliares
-		Long iteraciones = (long) 0;
+		iteraciones = (long) 0;
 		Double mejorFit = 0.0;
 		Double peorFit = (double) configuracion.getTamPoblacion();
 		Double promFit = 0.0;
@@ -114,19 +115,23 @@ public class AlgoritmoGenetico implements Runnable{
 
 	@Override
 	public void run() {
-		MainWindow.ejecutando = true;
+		MainAviones.ejecutando = true;
 		this.activo = true;
 		Vector<Integer> solucion;
 		solucion = getSolucion();
+		Solucion solution;
 		if (solucion != null && activo){
 			//System.out.println(solucion);
-			MainWindow.dibujarAviones(solucion);
+			solution = new Solucion(iteraciones,true,null,configuracion);
+			MainAviones.dibujarAviones(solucion);
 		}else
 		{
 			//System.out.println("Ejecución Interrumpida o se llego al limite maximo");
-			MainWindow.noSeEncontroSolucion(  );
+			solution = new Solucion(iteraciones,true,null,configuracion);
+			MainAviones.noSeEncontroSolucion(  );
 		}
-		MainWindow.ejecutando = false;
+		MainAviones.addNuevaSolucion(solution);
+		MainAviones.ejecutando = false;
 	}
 
 	public void terminar(){

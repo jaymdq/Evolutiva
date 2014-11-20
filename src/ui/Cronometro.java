@@ -6,9 +6,11 @@ public class Cronometro implements Runnable{
 
 	public boolean cronometroActivo = false;
 	private WebStatusLabel tiempo;
+	private Long ms;
 	
 	public Cronometro (WebStatusLabel label){
 		this.tiempo = label;
+		ms = new Long(0);
 	}
 	
 	@Override
@@ -26,6 +28,7 @@ public class Cronometro implements Runnable{
 				Thread.sleep( 4 );
 				//Incrementamos 4 milesimas de segundo
 				milesimas += 4;
+				ms += 4;
 				//Cuando llega a 1000 osea 1 segundo aumenta 1 segundo
 				//y las milesimas de segundo de nuevo a 0
 				if( milesimas == 1000 )
@@ -65,6 +68,7 @@ public class Cronometro implements Runnable{
 	public void empezar(){
 		cronometroActivo = true;
 		Thread t = new Thread(this);
+		ms = new Long(0);
 		t.start();
 	}
 	
@@ -74,6 +78,7 @@ public class Cronometro implements Runnable{
 
 	public void reiniciar() {
 		tiempo.setText("00:00:00:000");
+		ms = new Long(0);
 		
 	}
 	
@@ -81,5 +86,8 @@ public class Cronometro implements Runnable{
 		return tiempo.getText();
 	}
 
+	public Long getMs(){
+		return this.ms;
+	}
 
 }

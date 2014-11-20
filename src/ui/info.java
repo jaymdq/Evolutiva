@@ -47,7 +47,7 @@ public class info {
 		for (Entry<Object, Object> entrada : lista){
 			System.out.println("Clave " + entrada.getKey() + " Valor " + entrada.getValue());
 		}
-		System.out.println("SASASAS");
+	
 		for (Entry<String, String> entrada : System.getenv().entrySet()){
 			System.out.println("Clave " + entrada.getKey() + " Valor " + entrada.getValue());
 		}
