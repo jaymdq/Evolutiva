@@ -123,14 +123,15 @@ public class AlgoritmoGenetico implements Runnable{
 		if (solucion != null && activo){
 			//System.out.println(solucion);
 			solution = new Solucion(iteraciones,true,null,configuracion);
+			MainAviones.addNuevaSolucion(solution);
 			MainAviones.dibujarAviones(solucion);
 		}else
 		{
 			//System.out.println("Ejecución Interrumpida o se llego al limite maximo");
-			solution = new Solucion(iteraciones,true,null,configuracion);
+			solution = new Solucion(iteraciones,false,null,configuracion);
+			MainAviones.addNuevaSolucion(solution);
 			MainAviones.noSeEncontroSolucion(  );
 		}
-		MainAviones.addNuevaSolucion(solution);
 		MainAviones.ejecutando = false;
 	}
 

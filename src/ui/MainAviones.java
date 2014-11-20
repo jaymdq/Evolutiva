@@ -7,8 +7,10 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 
 import algoritmoGenetico.AlgoritmoGenetico;
+import algoritmoGenetico.ComparadorSoluciones;
 import algoritmoGenetico.Configuracion;
 import algoritmoGenetico.Solucion;
+import algoritmoGenetico.SolucionAlgoritmo;
 
 import com.alee.extended.filechooser.WebDirectoryChooser;
 import com.alee.extended.layout.ToolbarLayout;
@@ -34,6 +36,7 @@ import javax.swing.JMenu;
 import java.awt.Dialog.ModalityType;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.Collections;
 import java.util.Vector;
 
 import javax.swing.JMenuItem;
@@ -450,11 +453,8 @@ public class MainAviones {
 			System.gc();
 		}
 		//Paramos al reloj.
+		if (! automatizado)
 		cronometro.cronometroActivo = false;
-
-		if (automatizado && t_lanzador != null){
-			soluciones.lastElement().setTiempo(cronometro.getMs());
-		}
 
 		if (t_lanzador != null)
 			t_lanzador.interrupt();
@@ -465,6 +465,8 @@ public class MainAviones {
 
 		try{
 			consola.escribirSalto("Fin de la Ejecución : " + info.getHoraFecha());
+			consola.escribirSalto("Tiempo de Ejecución : " + cronometro.toString());
+			
 
 			consola.escribirSalto("Se llegó al límite de generaciones permitidas o se canceló la ejecución: no se encontró una solución.");
 		} catch(Exception e) {}
@@ -487,9 +489,14 @@ public class MainAviones {
 		if (!automatizado && t_lanzador == null)
 			doClick();
 
+		if (automatizado && t_lanzador != null){
+			soluciones.lastElement().setTiempo(cronometro.getMs());
+			cronometro.parar();
+		}
+		
 		//Escribimos a Archivo
 		escribirAArchivo();
-
+		
 	}
 
 	public static void doClick(){
@@ -513,6 +520,11 @@ public class MainAviones {
 		//método que genera un archivo con las estadisticas!!
 		String salidaAEscribir = "";
 		Integer s_generadas = 5;
+		Vector<SolucionAlgoritmo> solucionesAlgoritmos = new Vector<SolucionAlgoritmo>(0);
+		ComparadorSoluciones comparador3 = new ComparadorSoluciones(null,"Tiempo");
+		ComparadorSoluciones comparador2 = new ComparadorSoluciones(comparador3,"Iteraciones");
+		ComparadorSoluciones comparador1 = new ComparadorSoluciones(comparador2,"Efectividad");
+		
 		Integer i = 0;
 		Double iteracionesProm = (double) 0;
 		Double tiempoProm = (double)0;
@@ -532,6 +544,7 @@ public class MainAviones {
 				tiempoProm = tiempoProm / s_generadas;
 				Double efectividad = (double) (solucionesEncontradas / s_generadas);
 				
+				solucionesAlgoritmos.add(new SolucionAlgoritmo(iteracionesProm,tiempoProm,s.getConfig(),efectividad));
 				
 				//Se reinicializan variables
 				i = 0;
@@ -541,5 +554,21 @@ public class MainAviones {
 			}
 
 		}
+		
+		//Se ordena el vector resultante!!
+		Collections.sort(solucionesAlgoritmos,comparador1);
+		Collections.reverse(solucionesAlgoritmos);
+		
+		consola.limpiar();
+		consola.escribirSalto("Ejecución Finalizada");
+		consola.escribirSalto(info.getInfoGeneral());
+		consola.escribirSalto("");
+		consola.escribirSalto("Resultados: ");
+		
+		for (SolucionAlgoritmo solutionA : solucionesAlgoritmos){
+			consola.escribirSalto(solutionA.toString());
+		}
+		escribirAArchivo();
+		System.out.println(solucionesAlgoritmos);
 	}
 }

@@ -40,6 +40,8 @@ public class Solucion {
 	public void setConfig(Configuracion config) {
 		this.config = config;
 	}
+
+
 	
 	
 }

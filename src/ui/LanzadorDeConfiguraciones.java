@@ -33,7 +33,7 @@ public class LanzadorDeConfiguraciones implements Runnable {
 			consola.limpiar();
 			consola.escribirSalto(c.toString());
 			//NO BORRAR ESTOO !! 
-			//consola.escribirSalto(info.configPc());
+			consola.escribirSalto(info.configPc());
 
 			AlgoritmoGenetico algoritmo = new AlgoritmoGenetico(c,consola);
 
@@ -41,23 +41,25 @@ public class LanzadorDeConfiguraciones implements Runnable {
 			consola.escribirSalto("Comienzo de la ejecución : " + info.getHoraFecha());
 
 			threadEjecucion = new Thread(algoritmo);
+			cronometro.reiniciar();
 			cronometro.empezar();
 			threadEjecucion.start();
 			
 			do {
 				try {
-					Thread.sleep(5000);
+					Thread.sleep(100);
 				} catch (InterruptedException e) {}
 			} while (MainAviones.ejecutando);
 			
 			
 			try {
-				Thread.sleep(5000);
+				Thread.sleep(1000);
 			} catch (InterruptedException e) {}
 
 			i++;
 		}
 		System.out.println("Termino el lanzador");
+		MainAviones.doClick();
 		MainAviones.automatizado = false;
 		MainAviones.calcularEstadisticas();
 

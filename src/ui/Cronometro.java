@@ -79,7 +79,6 @@ public class Cronometro implements Runnable{
 	public void reiniciar() {
 		tiempo.setText("00:00:00:000");
 		ms = new Long(0);
-		
 	}
 	
 	public String toString(){
