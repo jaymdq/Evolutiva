@@ -72,6 +72,7 @@ public class MainAviones {
 	private static WebButton button;
 	DialogConfiguracion dialogConfig;
 	private LanzadorDeConfiguraciones lanzador;
+	private AlgoritmoGenetico algoritmo;
 	private static Vector<Configuracion> configuraciones = new Vector<Configuracion>();
 	public static boolean automatizado;
 	private static Thread t_lanzador;
@@ -389,7 +390,7 @@ public class MainAviones {
 
 		consola.escribirSalto("Solución Codificada: ");
 		consola.escribirSalto(solucion.toString());
-		
+
 		if ( ! automatizado ){
 			//Aviso que se encontró una solución.
 			final WebNotificationPopup notificationPopup = new WebNotificationPopup ();
@@ -441,9 +442,10 @@ public class MainAviones {
 				consola.escribirSalto(config.toString());
 
 				//NO BORRAR ESTOO !! 
-				//consola.escribirSalto(info.configPc());
+				if (System.getProperty("file.separator") != "/")
+					consola.escribirSalto(info.configPc());
 
-				AlgoritmoGenetico algoritmo = new AlgoritmoGenetico(this.config,consola);
+				algoritmo = new AlgoritmoGenetico(this.config,consola);
 
 				//Mostramos la fecha
 				consola.escribirSalto("Comienzo de la ejecución : " + info.getHoraFecha());
@@ -456,10 +458,10 @@ public class MainAviones {
 	}
 
 	private void pararEjecucion() {
-		
+
 		if (threadEjecucion != null && threadEjecucion.isAlive()){
 			threadEjecucion.interrupt();
-			
+
 			System.gc();
 		}
 		//Paramos al reloj.
@@ -478,7 +480,7 @@ public class MainAviones {
 		try{
 			consola.escribirSalto("Fin de la Ejecución : " + info.getHoraFecha());
 			consola.escribirSalto("Tiempo de Ejecución : " + cronometro.toString());
-			
+
 
 			consola.escribirSalto("Se llegó al límite de generaciones permitidas o se canceló la ejecución: no se encontró una solución.");
 		} catch(Exception e) {}
@@ -505,10 +507,10 @@ public class MainAviones {
 			soluciones.lastElement().setTiempo(cronometro.getMs());
 			cronometro.parar();
 		}
-		
+
 		//Escribimos a Archivo
 		escribirAArchivo("");
-		
+
 	}
 
 	public static void doClick(){
@@ -537,7 +539,7 @@ public class MainAviones {
 		ComparadorSoluciones comparador3 = new ComparadorSoluciones(null,"Tiempo");
 		ComparadorSoluciones comparador2 = new ComparadorSoluciones(comparador3,"Iteraciones");
 		ComparadorSoluciones comparador1 = new ComparadorSoluciones(comparador2,"Efectividad");
-		
+
 		Integer i = 0;
 		Double iteracionesProm = (double) 0;
 		Double tiempoProm = (double)0;
@@ -549,16 +551,16 @@ public class MainAviones {
 			tiempoProm += s.getTiempo();
 			if (s.EncontroSolucion())
 				solucionesEncontradas++;
-			
+
 			i++;
 			if (i == s_generadas){
 				//Se guarda el resultado del algoritmo
 				iteracionesProm = iteracionesProm / s_generadas;
 				tiempoProm = tiempoProm / s_generadas;
 				Double efectividad = (double) (solucionesEncontradas / s_generadas);
-				
+
 				solucionesAlgoritmos.add(new SolucionAlgoritmo(iteracionesProm,tiempoProm,s.getConfig(),efectividad));
-				
+
 				//Se reinicializan variables
 				i = 0;
 				iteracionesProm = (double) 0;
@@ -567,20 +569,20 @@ public class MainAviones {
 			}
 
 		}
-		
+
 		//Se ordena el vector resultante!!
 		Collections.sort(solucionesAlgoritmos,comparador1);
-		
+
 		consola.limpiar();
 		consola.escribirSalto("Ejecución Finalizada");
 		consola.escribirSalto(info.getInfoGeneral());
 		consola.escribirSalto("");
 		consola.escribirSalto("Resultados: ");
-		
+
 		for (SolucionAlgoritmo solutionA : solucionesAlgoritmos){
 			consola.escribirSalto(solutionA.toString());
 		}
 		escribirAArchivo("Resultados de algoritmos automatizados: ");
-		
+
 	}
 }

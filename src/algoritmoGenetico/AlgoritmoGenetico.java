@@ -15,7 +15,7 @@ public class AlgoritmoGenetico implements Runnable{
 	private Consola consola;
 	private boolean activo;
 	private Long iteraciones;
-	
+
 	public AlgoritmoGenetico(Configuracion config,Consola consola) {
 		this.configuracion = config;
 		this.consola = consola;
@@ -34,7 +34,7 @@ public class AlgoritmoGenetico implements Runnable{
 		Vector<Cromosoma> poblacion = new Vector<Cromosoma>();
 		GenerarPoblacion gen = configuracion.getGenPob();
 		poblacion = gen.generar(configuracion.getTamPoblacion(),configuracion.getN());
-				
+
 		for (Cromosoma c : poblacion){
 			//Configuracion
 			configuracion.getEvaluacion().calcularFitness(c);
@@ -65,7 +65,7 @@ public class AlgoritmoGenetico implements Runnable{
 
 			//Cruzamos a las parejas
 			Vector<Cromosoma> hijos = new Vector<Cromosoma>();
-			
+
 			for (Vector<Cromosoma> pareja : parejas){
 				//Vemos si se da la chanche de que se crucen
 				if (Math.random() < configuracion.getProbabilidadCruce()){
@@ -78,12 +78,12 @@ public class AlgoritmoGenetico implements Runnable{
 				if ( Math.random() < configuracion.getProbabilidadMutacion())
 					configuracion.getMutacion().mutar(c);
 			}
-			
+
 			//Calculamos el Fitness de los hijos
 			for (Cromosoma c : hijos){
 				configuracion.getEvaluacion().calcularFitness(c);
 			}
-			
+
 			//Seleccionamos los sobrevivientes
 			poblacion = configuracion.getSeleccionSobrevivientes().seleccionar(padres, hijos);
 
@@ -121,13 +121,10 @@ public class AlgoritmoGenetico implements Runnable{
 		solucion = getSolucion();
 		Solucion solution;
 		if (solucion != null && activo){
-			//System.out.println(solucion);
 			solution = new Solucion(iteraciones,true,null,configuracion);
 			MainAviones.addNuevaSolucion(solution);
 			MainAviones.dibujarAviones(solucion);
-		}else
-		{
-			//System.out.println("Ejecución Interrumpida o se llego al limite maximo");
+		}else{
 			solution = new Solucion(iteraciones,false,null,configuracion);
 			MainAviones.addNuevaSolucion(solution);
 			MainAviones.noSeEncontroSolucion(  );

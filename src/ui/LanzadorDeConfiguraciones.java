@@ -37,7 +37,8 @@ public class LanzadorDeConfiguraciones implements Runnable {
 			consola.limpiar();
 			consola.escribirSalto(c.toString());
 			//NO BORRAR ESTOO !! 
-			consola.escribirSalto(info.configPc());
+			if (System.getProperty("file.separator") != "/")
+				consola.escribirSalto(info.configPc());
 
 			AlgoritmoGenetico algoritmo = new AlgoritmoGenetico(c,consola);
 
