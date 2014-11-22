@@ -56,6 +56,10 @@ public class LanzadorDeConfiguraciones implements Runnable {
 				} catch (InterruptedException e) {}
 			} while (MainAviones.ejecutando);
 
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {}
+						
 			i++;
 		}
 		System.out.println("Termino el lanzador");
