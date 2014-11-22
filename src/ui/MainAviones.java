@@ -71,6 +71,7 @@ public class MainAviones {
 	private static WebStatusLabel tiempo;
 	private static WebButton button;
 	DialogConfiguracion dialogConfig;
+	private LanzadorDeConfiguraciones lanzador;
 	private static Vector<Configuracion> configuraciones = new Vector<Configuracion>();
 	public static boolean automatizado;
 	private static Thread t_lanzador;
@@ -289,19 +290,25 @@ public class MainAviones {
 		if ( directoryChooser.getResult () == DialogOptions.OK_OPTION )
 		{
 			File file = directoryChooser.getSelectedDirectory ();
-			rutaDirectorio = file.getAbsolutePath() + "\\";
+			rutaDirectorio = file.getAbsolutePath() + System.getProperty("file.separator") ;
 			frame.setTitle(titulo + "     Salida: " + rutaDirectorio);
 		}
 	}
 
-	private static void escribirAArchivo(){
+	private static void escribirAArchivo(String string){
 		if (rutaDirectorio != null){
 			FileOutputStream fos;
 			try {
 				String fechahora = info.getHoraFechaArchivo();
-				fos = new FileOutputStream(rutaDirectorio+fechahora+".sol");
+				if (string == "")
+					fos = new FileOutputStream(rutaDirectorio+fechahora+".sol");
+				else
+					fos = new FileOutputStream(rutaDirectorio+string+"_"+fechahora+".sol");
 				try {
-					consola.escribir("Archivo almacenado en " + rutaDirectorio +  fechahora + ".sol");
+					if (string == "")
+						consola.escribir("Archivo almacenado en " + rutaDirectorio +  fechahora + ".sol");
+					else
+						consola.escribir("Archivo almacenado en " + rutaDirectorio + string + "_" + fechahora + ".sol");
 					fos.write(consola.getTexto().getBytes());
 					fos.close();
 				} catch (IOException e) {
@@ -380,6 +387,9 @@ public class MainAviones {
 			consola.escribirSalto("");
 		}
 
+		consola.escribirSalto("Solución Codificada: ");
+		consola.escribirSalto(solucion.toString());
+		
 		if ( ! automatizado ){
 			//Aviso que se encontró una solución.
 			final WebNotificationPopup notificationPopup = new WebNotificationPopup ();
@@ -401,7 +411,7 @@ public class MainAviones {
 			doClick();
 
 		//Escribimos a Archivo
-		escribirAArchivo();
+		escribirAArchivo("");
 
 	}
 
@@ -421,7 +431,7 @@ public class MainAviones {
 		if (automatizado &&  t_lanzador == null)
 		{
 			soluciones.clear();
-			LanzadorDeConfiguraciones lanzador = new LanzadorDeConfiguraciones(consola,cronometro,threadEjecucion,configuraciones);	
+			lanzador = new LanzadorDeConfiguraciones(consola,cronometro,threadEjecucion,configuraciones);	
 			t_lanzador = new Thread(lanzador);
 			t_lanzador.start();
 		}
@@ -446,18 +456,20 @@ public class MainAviones {
 	}
 
 	private void pararEjecucion() {
+		
 		if (threadEjecucion != null && threadEjecucion.isAlive()){
 			threadEjecucion.interrupt();
-			//consola.escribirSalto("Ejecución interrumpida : " + info.getHoraFecha());
-
+			
 			System.gc();
 		}
 		//Paramos al reloj.
-		if (! automatizado)
 		cronometro.cronometroActivo = false;
 
-		if (t_lanzador != null)
+		if (t_lanzador != null){
+			lanzador.terminar();
 			t_lanzador.interrupt();
+			t_lanzador = null;
+		}
 
 	}
 
@@ -495,7 +507,7 @@ public class MainAviones {
 		}
 		
 		//Escribimos a Archivo
-		escribirAArchivo();
+		escribirAArchivo("");
 		
 	}
 
@@ -503,12 +515,14 @@ public class MainAviones {
 		button.doClick();
 	}
 
+	@SuppressWarnings("static-access")
 	public void setConfigAutomatizada(Vector<Configuracion> configuraciones) {
 
 		this.configuraciones  = configuraciones;
 		automatizado = true;
 		button.setEnabled(true);
 		consola.limpiar();
+		consola.escribirSalto("Algoritmos automatizados: Presione Ejecutar");
 	}
 
 	public static void addNuevaSolucion(Solucion solution) {
@@ -518,7 +532,6 @@ public class MainAviones {
 
 	public static void calcularEstadisticas(){
 		//método que genera un archivo con las estadisticas!!
-		String salidaAEscribir = "";
 		Integer s_generadas = 5;
 		Vector<SolucionAlgoritmo> solucionesAlgoritmos = new Vector<SolucionAlgoritmo>(0);
 		ComparadorSoluciones comparador3 = new ComparadorSoluciones(null,"Tiempo");
@@ -557,7 +570,6 @@ public class MainAviones {
 		
 		//Se ordena el vector resultante!!
 		Collections.sort(solucionesAlgoritmos,comparador1);
-		Collections.reverse(solucionesAlgoritmos);
 		
 		consola.limpiar();
 		consola.escribirSalto("Ejecución Finalizada");
@@ -568,7 +580,7 @@ public class MainAviones {
 		for (SolucionAlgoritmo solutionA : solucionesAlgoritmos){
 			consola.escribirSalto(solutionA.toString());
 		}
-		escribirAArchivo();
-		System.out.println(solucionesAlgoritmos);
+		escribirAArchivo("Resultados de algoritmos automatizados: ");
+		
 	}
 }
