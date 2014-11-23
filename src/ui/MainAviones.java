@@ -304,12 +304,12 @@ public class MainAviones {
 				if (string == "")
 					fos = new FileOutputStream(rutaDirectorio+fechahora+".sol");
 				else
-					fos = new FileOutputStream(rutaDirectorio+string+"_"+fechahora+".sol");
+					fos = new FileOutputStream(rutaDirectorio+string+"_"+fechahora+".txt");
 				try {
 					if (string == "")
 						consola.escribir("Archivo almacenado en " + rutaDirectorio +  fechahora + ".sol");
 					else
-						consola.escribir("Archivo almacenado en " + rutaDirectorio + string + "_" + fechahora + ".sol");
+						consola.escribir("Archivo almacenado en " + rutaDirectorio + string + "_" + fechahora + ".txt");
 					fos.write(consola.getTexto().getBytes());
 					fos.close();
 				} catch (IOException e) {
@@ -557,7 +557,7 @@ public class MainAviones {
 				//Se guarda el resultado del algoritmo
 				iteracionesProm = iteracionesProm / s_generadas;
 				tiempoProm = tiempoProm / s_generadas;
-				Double efectividad = (double) (solucionesEncontradas / s_generadas);
+				Double efectividad =  ((double)solucionesEncontradas / s_generadas);
 
 				solucionesAlgoritmos.add(new SolucionAlgoritmo(iteracionesProm,tiempoProm,s.getConfig(),efectividad));
 
@@ -575,14 +575,15 @@ public class MainAviones {
 
 		consola.limpiar();
 		consola.escribirSalto("Ejecución Finalizada");
-		consola.escribirSalto(info.getInfoGeneral());
+		if (System.getProperty("file.separator") != "/")
+			consola.escribirSalto(info.configPc());
 		consola.escribirSalto("");
-		consola.escribirSalto("Resultados: ");
-
+		
 		for (SolucionAlgoritmo solutionA : solucionesAlgoritmos){
 			consola.escribirSalto(solutionA.toString());
 		}
-		escribirAArchivo("Resultados de algoritmos automatizados: ");
+
+		escribirAArchivo("Resultados de algoritmos automatizado ");
 
 	}
 }

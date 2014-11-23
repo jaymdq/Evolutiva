@@ -64,10 +64,11 @@ public class LanzadorDeConfiguraciones implements Runnable {
 		}
 		System.out.println("Termino el lanzador");
 		if (activo)
+			MainAviones.calcularEstadisticas();
+		if (activo)
 			MainAviones.doClick();
 		MainAviones.automatizado = false;
-		if (activo)
-			MainAviones.calcularEstadisticas();
+		
 
 	}
 
