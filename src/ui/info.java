@@ -41,18 +41,6 @@ public class info {
 		return System.getProperty("java.version");  
 	}
 
-	public static String getInfoGeneral()
-	{
-		Set<Entry<Object, Object>> lista = System.getProperties().entrySet();
-		for (Entry<Object, Object> entrada : lista){
-			System.out.println("Clave " + entrada.getKey() + " Valor " + entrada.getValue());
-		}
-	
-		for (Entry<String, String> entrada : System.getenv().entrySet()){
-			System.out.println("Clave " + entrada.getKey() + " Valor " + entrada.getValue());
-		}
-		return "";
-	}
 
 	public static String configPc() {
 		String salida = "";

@@ -1,6 +1,6 @@
 package algoritmoGenetico;
 
-public class SolucionAlgoritmo implements Comparable<SolucionAlgoritmo> {
+public class SolucionAlgoritmo  {
 
 	private Double iteraciones;
 	private Double tiempo;
@@ -15,12 +15,6 @@ public class SolucionAlgoritmo implements Comparable<SolucionAlgoritmo> {
 		this.tiempo = tiempoProm;
 		this.config = config;
 		this.efectividad = efectividad;
-	}
-
-	@Override
-	public int compareTo(SolucionAlgoritmo arg0) {
-		
-		return 0;
 	}
 
 	public Double getIteraciones() {
