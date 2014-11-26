@@ -2,9 +2,6 @@ package ui;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.Map.Entry;
-import java.util.Set;
-
 import org.hyperic.sigar.CpuInfo;
 import org.hyperic.sigar.Sigar;
 import org.hyperic.sigar.SigarException;
@@ -44,22 +41,24 @@ public class info {
 
 	public static String configPc() {
 		String salida = "";
+		
 		salida += "Propiedades ("+ nombrePC() +") : \n";
 		salida += "  +  Usuario = [" + Usuario() +"].\n";
 		salida += "  +  Sistema Operativo = [" + SO() +"].\n";
 		salida += "  +  Arquitectura del Sistema Operativo = [" + arqSO() +"].\n";
 
 		CpuInfo[] infos = null;
-		Sigar sigar = new Sigar();
 		try {
+			Sigar sigar = new Sigar();
 			infos = sigar.getCpuInfoList();
 		} catch (SigarException e) {}
-		CpuInfo info = infos[0];
-		salida += "  +  Procesador = [" + Procesador() +"].\n";
-		salida += "  	+  Fabricante = [" + info.getVendor() +"].\n";
-		salida += "  	+  Modelo = [" + info.getModel() +"].\n";
-		salida += "  	+  Mhz = [" + info.getMhz() +"].\n\n";
-
+		if (infos != null){
+			CpuInfo info = infos[0];
+			salida += "  +  Procesador = [" + Procesador() +"].\n";
+			salida += "  	+  Fabricante = [" + info.getVendor() +"].\n";
+			salida += "  	+  Modelo = [" + info.getModel() +"].\n";
+			salida += "  	+  Mhz = [" + info.getMhz() +"].\n\n";
+		}
 		return salida;
 	}      
 
