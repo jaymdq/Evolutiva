@@ -417,12 +417,18 @@ public class MainAviones {
 	}
 
 	public void setConfig(Configuracion config) {
-		this.config  = config;
-		button.setEnabled(true);
-		consola.limpiar();
-		consola.escribirSalto(config.toString());
-		consola.escribirSalto(info.configPc());
-		automatizado = false;
+			button.setEnabled(true);
+			
+			if (threadEjecucion != null || t_lanzador != null){
+				doClick();
+			}
+			
+			this.config  = config;		
+			consola.limpiar();
+			consola.escribirSalto(config.toString());
+			consola.escribirSalto(info.configPc());
+			automatizado = false;
+			
 	}
 
 	private void ejecutar() {	
@@ -461,8 +467,9 @@ public class MainAviones {
 
 		if (threadEjecucion != null && threadEjecucion.isAlive()){
 			threadEjecucion.interrupt();
-
+			algoritmo.terminar();
 			System.gc();
+			threadEjecucion = null;
 		}
 		//Paramos al reloj.
 		cronometro.cronometroActivo = false;
@@ -492,7 +499,7 @@ public class MainAviones {
 		final WebClock clock = new WebClock ();
 		clock.setClockType ( ClockType.timer );
 		clock.setTimeLeft ( 5000 );
-		clock.setTimePattern ( "'Se llegó al límite de generaciones permitidas y no se encontró una solución.'" );
+		clock.setTimePattern ( "'Se llegó al límite de generaciones permitidas (o se paró la ejecución) y no se encontró una solución.'" );
 		notificationPopup.setContent ( new GroupPanel ( clock ) );
 		NotificationManager.showNotification ( notificationPopup );
 		clock.start ();
@@ -578,7 +585,7 @@ public class MainAviones {
 		if (System.getProperty("file.separator") != "/")
 			consola.escribirSalto(info.configPc());
 		consola.escribirSalto("");
-		
+
 		for (SolucionAlgoritmo solutionA : solucionesAlgoritmos){
 			consola.escribirSalto(solutionA.toString());
 		}
