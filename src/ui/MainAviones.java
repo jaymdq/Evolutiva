@@ -417,18 +417,18 @@ public class MainAviones {
 	}
 
 	public void setConfig(Configuracion config) {
-			button.setEnabled(true);
-			
-			if (threadEjecucion != null || t_lanzador != null){
-				doClick();
-			}
-			
-			this.config  = config;		
-			consola.limpiar();
-			consola.escribirSalto(config.toString());
-			consola.escribirSalto(info.configPc());
-			automatizado = false;
-			
+		button.setEnabled(true);
+
+		if (threadEjecucion != null || t_lanzador != null){
+			doClick();
+		}
+
+		this.config  = config;		
+		consola.limpiar();
+		consola.escribirSalto(config.toString());
+		consola.escribirSalto(info.configPc());
+		automatizado = false;
+
 	}
 
 	private void ejecutar() {	
@@ -465,18 +465,17 @@ public class MainAviones {
 
 	private void pararEjecucion() {
 
-		if (threadEjecucion != null && threadEjecucion.isAlive()){
-			threadEjecucion.interrupt();
-			algoritmo.terminar();
-			System.gc();
-			threadEjecucion = null;
-		}
 		//Paramos al reloj.
 		cronometro.cronometroActivo = false;
 
-		if (t_lanzador != null){
+		if (threadEjecucion != null && threadEjecucion.isAlive()){
+			algoritmo.terminar();
+			threadEjecucion = null;
+		}
+
+
+		if (t_lanzador != null ){
 			lanzador.terminar();
-			t_lanzador.interrupt();
 			t_lanzador = null;
 		}
 

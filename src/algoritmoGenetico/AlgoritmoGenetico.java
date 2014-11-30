@@ -89,7 +89,7 @@ public class AlgoritmoGenetico implements Runnable{
 
 			//Estadisticas
 			mejorFit = 0.0;
-			peorFit = (double) configuracion.getTamPoblacion();
+			peorFit = (double) configuracion.getN();
 			promFit = 0.0;
 			for (Cromosoma c : poblacion){
 				//Estadisticas
@@ -125,9 +125,11 @@ public class AlgoritmoGenetico implements Runnable{
 			MainAviones.addNuevaSolucion(solution);
 			MainAviones.dibujarAviones(solucion);
 		}else{
-			solution = new Solucion(iteraciones,false,null,configuracion);
-			MainAviones.addNuevaSolucion(solution);
-			MainAviones.noSeEncontroSolucion(  );
+			if (activo){
+				solution = new Solucion(iteraciones,false,null,configuracion);
+				MainAviones.addNuevaSolucion(solution);
+				MainAviones.noSeEncontroSolucion(  );
+			}
 		}
 		MainAviones.ejecutando = false;
 	}

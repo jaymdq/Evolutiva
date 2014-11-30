@@ -26,12 +26,10 @@ public class LanzadorDeConfiguraciones implements Runnable {
 	@Override
 	public void run() {
 		this.activo = true;
-		Integer i = 1;
-		for (Configuracion c : configuraciones){
+		for (int i = 0; i < configuraciones.size();i++){
 
-			if (activo == false)
-				break;
-			
+			Configuracion c = configuraciones.elementAt(i);
+
 			System.out.println("Se ejecuta la configuración: " + i);
 
 			consola.limpiar();
@@ -45,11 +43,14 @@ public class LanzadorDeConfiguraciones implements Runnable {
 			//Mostramos la fecha
 			consola.escribirSalto("Comienzo de la ejecución : " + info.getHoraFecha());
 
-			threadEjecucion = new Thread(algoritmo);
-			cronometro.reiniciar();
-			cronometro.empezar();
-			threadEjecucion.start();
 
+			if (activo){
+				threadEjecucion = new Thread(algoritmo);
+				cronometro.reiniciar();
+				cronometro.empezar();
+				threadEjecucion.start();
+			}
+			
 			do {
 				try {
 					Thread.sleep(100);
@@ -59,8 +60,9 @@ public class LanzadorDeConfiguraciones implements Runnable {
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {}
-						
-			i++;
+
+			if (activo == false)
+				i = configuraciones.size();
 		}
 		System.out.println("Termino el lanzador");
 		if (activo)
@@ -68,8 +70,6 @@ public class LanzadorDeConfiguraciones implements Runnable {
 		if (activo)
 			MainAviones.doClick();
 		MainAviones.automatizado = false;
-		
-
 	}
 
 	public void terminar(){
